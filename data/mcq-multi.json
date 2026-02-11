@@ -1,0 +1,175 @@
+{
+  "questions": [
+    {
+      "id": "mcq-multi-yarn-1",
+      "category": "YARN",
+      "type": "mcq_multi",
+      "prompt": "MapReduce v2 (MRv2 /YARN) splits which major functions of the JobTracker into separate daemons? Select two.",
+      "options": [
+        "Health states checks (heartbeats)",
+        "Resource management",
+        "Job scheduling/monitoring",
+        "Job coordination between the ResourceManager and NodeManager",
+        "Launching tasks",
+        "Managing file system metadata",
+        "MapReduce metric reporting",
+        "Managing tasks"
+      ],
+      "correctAnswer": [1, 2],
+      "explanation": "In MRv1 the JobTracker did both cluster resource management and job scheduling/monitoring. In YARN, ResourceManager handles resource management and ApplicationMaster handles job scheduling/monitoring for the application.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-hdfs-1",
+      "category": "HDFS",
+      "type": "mcq_multi",
+      "prompt": "What two processes must you do if you are running a Hadoop cluster with a single NameNode and six DataNodes, and you want to change a configuration parameter so that it affects all six DataNodes?",
+      "options": [
+        "You must restart the NameNode daemon to apply the changes to the cluster",
+        "You must restart all six DataNode daemons to apply the changes to the cluster.",
+        "You don't need to restart any daemon, as they will pick up changes automatically.",
+        "You must modify the configuration files on each of the six DataNode machines.",
+        "You must modify the configuration files on only one of the DataNode machine",
+        "You must modify the configuration files on the NameNode only. DataNodes read their configuration from the master nodes."
+      ],
+      "correctAnswer": [1, 3],
+      "explanation": "Configuration files are read locally by each DataNode. Therefore, the configuration must be updated on all DataNode machines, and the DataNode daemons must be restarted to apply the changes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-hdfs-2",
+      "category": "HDFS",
+      "type": "mcq_multi",
+      "prompt": "What two updates occur when a client application opens a stream to begin a file write on a cluster running MapReduce v1 (MRv1)?",
+      "options": [
+        "Once the write stream closes on the DataNode, the DataNode immediately initiates a block report to the NameNode.",
+        "The change is written to the NameNode disk.",
+        "The metadata in the RAM on the NameNode is flushed to disk.",
+        "The metadata in RAM on the NameNode is flushed disk.",
+        "The metadata in RAM on the NameNode is updated.",
+        "The change is written to the edits file."
+      ],
+      "correctAnswer": [4, 5],
+      "explanation": "When a file is opened for writing, the NameNode updates its in-memory metadata and records the change in the edits log for durability.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-hdfs-3",
+      "category": "HDFS",
+      "type": "mcq_multi",
+      "prompt": "Which three distcp features can you utilize on a Hadoop cluster?",
+      "options": [
+        "Use distcp to copy files only between two clusters or more. You cannot use distcp to copy data between directories inside the same cluster.",
+        "Use distcp to copy HBase table files.",
+        "Use distcp to copy physical blocks from the source to the target destination in your cluster.",
+        "Use distcp to copy data between directories inside the same cluster.",
+        "Use distcp to run an internal MapReduce job to copy files."
+      ],
+      "correctAnswer": [1, 3, 4],
+      "explanation": "DistCp is a MapReduce-based tool that can copy data between directories (even within the same cluster), can copy HBase files, and internally runs a MapReduce job.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-yarn-2",
+      "category": "YARN",
+      "type": "mcq_multi",
+      "prompt": "You configure Hadoop cluster with both MapReduce frameworks, MapReduce v1 (MRv1) and MapReduce v2 (MRv2/YARN). Which two MapReduce (computational) daemons do you need to configure to run on your master nodes?",
+      "options": [
+        "JobTracker",
+        "ResourceManager",
+        "ApplicationMaster",
+        "JournalNode",
+        "NodeManager"
+      ],
+      "correctAnswer": [0, 1],
+      "explanation": "JobTracker is required for MRv1, and ResourceManager is required for MRv2/YARN. ApplicationMasters and NodeManagers run on worker nodes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-yarn-3",
+      "category": "YARN",
+      "type": "mcq_multi",
+      "prompt": "Identify two features/issues that MapReduce v2 (MRv2/YARN) is designed to address:",
+      "options": [
+        "Resource pressure on the JobTracker",
+        "HDFS latency.",
+        "Ability to run frameworks other than MapReduce, such as MPI.",
+        "Reduce complexity of the MapReduce APIs.",
+        "Single point of failure in the NameNode.",
+        "Standardize on a single MapReduce API."
+      ],
+      "correctAnswer": [0, 2],
+      "explanation": "YARN removes resource management from the JobTracker and enables multiple distributed processing frameworks to run on the same cluster.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-hdfs-4",
+      "category": "HDFS",
+      "type": "mcq_multi",
+      "prompt": "Which two of the following are valid statements? (Choose two)",
+      "options": [
+        "HDFS is optimized for storing a large number of files smaller than the HDFS block size.",
+        "HDFS has the Characteristic of supporting a write once, read many data access model.",
+        "HDFS is a distributed file system that replaces ext3 or ext4 on Linux nodes in a Hadoop cluster.",
+        "HDFS is a distributed file system that runs on top of native OS filesystems and is well suited to storage of very large data sets."
+      ],
+      "correctAnswer": [1, 3],
+      "explanation": "HDFS is optimized for large files. Files are typically written once and read many times. It runs on top of existing filesystems, not instead of them",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-YARN-6 ",
+      "category": "YARN",
+      "type": "mcq_multi",
+      "prompt": "MRv2/YARN addresses which two issues?",
+      "options": [
+        "NameNode SPOF",
+        "Resource pressure on JobTracker",
+        "HDFS latency",
+        "Run frameworks other than MapReduce (e.g., MPI)",
+        "Reduce API complexity",
+        "Standardize on one MR API"
+      ],
+      "correctAnswer": [1, 3],
+      "explanation": "YARN splits resource management/scheduling away from JobTracker and enables multiple frameworks beyond MR",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-yarn-5",
+      "category": "YARN",
+      "type": "mcq_multi",
+      "prompt": "MRv2 splits which major JobTracker functions into separate daemons? (Select two)",
+      "options": [
+        "Health status checks",
+        "Resource management",
+        "Job scheduling/monitoring",
+        "Coordination between RM and NM",
+        "Launching tasks",
+        "FS metadata",
+        "Metric reporting",
+        "Managing tasks"
+      ],
+      "correctAnswer": [1, 2],
+      "explanation": "Resource management moved to ResourceManager, job coordination to ApplicationMaster.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    }
+  ]
+}

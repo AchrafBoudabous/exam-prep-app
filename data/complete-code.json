@@ -1,0 +1,112 @@
+{
+  "scripts": [
+    {
+      "id": "code-script-1",
+      "category": "MapReduce Driver",
+      "title": "Average Word Length - Driver Class",
+      "description": "Complete the MapReduce driver class for calculating average word length",
+      "code": "package solution;\n\nimport org.apache.hadoop.fs.Path;\nimport org.apache.hadoop.io.IntWritable;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.io.DoubleWritable;\nimport org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\nimport org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\nimport org.apache.hadoop.mapreduce.Job;\nimport org.apache.hadoop.conf.Configuration;\nimport org.apache.hadoop.conf.Configured;\nimport org.apache.hadoop.util.Tool;\nimport org.apache.hadoop.util.ToolRunner;\n\npublic class AvgWordLength extends Configured implements Tool {\n\n    public static void main(String[] args) throws Exception {\n        Configuration conf = new Configuration();\n        int exitCode = ToolRunner.run(conf, new AvgWordLength(), args);\n        System.exit(exitCode);\n    }\n\n    @Override\n    public int run(String[] args) throws Exception {\n\n        if (args.length != 2) {\n            System.out.printf(\"Usage: AvgWordLength <input dir> <output dir>\\n\");\n            System.exit(-1);\n        }\n\n        Job job = new Job(getConf());\n\n        job.setJarByClass(AvgWordLength.class);\n        job.setJobName(\"Average Word Length\");\n\n        FileInputFormat.setInputPaths(job, new Path(args[0]));\n        FileOutputFormat.setOutputPath(job, new Path(args[1]));\n\n        job.setMapperClass(LetterMapper.class);\n        job.setReducerClass(AverageReducer.class);\n\n        job.setMapOutputKeyClass(Text.class);\n        job.setMapOutputValueClass(IntWritable.class);\n\n        job.setOutputKeyClass(Text.class);\n        job.setOutputValueClass(DoubleWritable.class);\n\n        return job.waitForCompletion(true) ? 0 : 1;\n    }\n}",
+      "blankableLines": [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 17, 18, 19, 28, 30, 31, 33, 34, 36, 37, 39, 40, 41, 43, 44, 46],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-2",
+      "category": "MapReduce Mapper",
+      "title": "Letter Mapper",
+      "description": "Complete the Mapper class for extracting first letters",
+      "code": "import java.io.IOException;\n\nimport org.apache.hadoop.conf.Configuration;\nimport org.apache.hadoop.io.IntWritable;\nimport org.apache.hadoop.io.LongWritable;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.mapreduce.Mapper;\n\npublic class LetterMapper extends Mapper<LongWritable, Text, Text, IntWritable> {\n\n    boolean caseSensitive = false;\n\n    @Override\n    public void map(LongWritable key, Text value, Context context)\n            throws IOException, InterruptedException {\n\n        String line = value.toString();\n\n        for (String word : line.split(\"\\\\s+\")) {\n            if (word.length() > 0) {\n\n                String letter;\n\n                if (caseSensitive)\n                    letter = word.substring(0, 1);\n                else\n                    letter = word.substring(0, 1).toLowerCase();\n\n                context.write(new Text(letter),\n                        new IntWritable(word.length()));\n            }\n        }\n    }\n\n    @Override\n    public void setup(Context context) {\n        Configuration conf = context.getConfiguration();\n        caseSensitive = conf.getBoolean(\"caseSensitive\", false);\n    }\n}",
+      "blankableLines": [0, 2, 3, 4, 5, 6, 8, 10, 13, 14, 17, 19, 20, 22, 24, 25, 26, 27, 29, 30, 35, 36, 37, 38],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-3",
+      "category": "MapReduce Reducer",
+      "title": "Average Reducer",
+      "description": "Complete the Reducer class for calculating averages",
+      "code": "package solution;\n\nimport java.io.IOException;\n\nimport org.apache.hadoop.io.DoubleWritable;\nimport org.apache.hadoop.io.IntWritable;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.mapreduce.Reducer;\n\npublic class AverageReducer extends\n    Reducer<Text, IntWritable, Text, DoubleWritable> {\n\n  @Override\n  public void reduce(Text key, Iterable<IntWritable> values, Context context)\n      throws IOException, InterruptedException {\n\n    long sum = 0, count = 0;\n\n    for (IntWritable value : values) {\n      sum += value.get();\n      count++;\n    }\n    if (count != 0) {\n      double result = (double)sum / (double)count;\n      context.write(key, new DoubleWritable(result));\n    }\n  }\n}",
+      "blankableLines": [0, 2, 4, 5, 6, 7, 9, 10, 13, 14, 17, 19, 20, 21, 23, 24, 25],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-4",
+      "category": "MapReduce Mapper",
+      "title": "Index Mapper",
+      "description": "Complete the Mapper class for creating inverted index",
+      "code": "package solution;\n\nimport java.io.IOException;\n\nimport org.apache.hadoop.fs.Path;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.mapreduce.lib.input.FileSplit;\nimport org.apache.hadoop.mapreduce.Mapper;\n\npublic class IndexMapper extends Mapper<Text, Text, Text, Text> {\n\n  @Override\n  public void map(Text key, Text value, Context context) throws IOException,\n      InterruptedException {\n\n    FileSplit fileSplit = (FileSplit) context.getInputSplit();\n    Path path = fileSplit.getPath();\n\n    String wordPlace = path.getName() + \"@\" + key.toString();\n    Text location = new Text(wordPlace);\n\n    String lc_line = value.toString().toLowerCase();\n\n    for (String word : lc_line.split(\"\\\\W+\")) {\n      if (word.length() > 0) {\n        context.write(new Text(word), location);\n      }\n    }\n  }\n}",
+      "blankableLines": [0, 2, 4, 5, 6, 7, 9, 12, 13, 16, 17, 19, 20, 22, 24, 25, 26],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-5",
+      "category": "MapReduce Reducer",
+      "title": "Index Reducer",
+      "description": "Complete the Reducer class for inverted index",
+      "code": "package solution;\n\nimport java.io.IOException;\n\nimport org.apache.hadoop.io.Text;\n\nimport org.apache.hadoop.mapreduce.Reducer;\n\npublic class IndexReducer extends Reducer<Text, Text, Text, Text> {\n\n  private static final String SEP = \",\";\n\n  @Override\n  public void reduce(Text key, Iterable<Text> values, Context context)\n      throws IOException, InterruptedException {\n\n    StringBuilder valueList = new StringBuilder();\n    boolean firstValue = true;\n\n    for (Text value : values) {\n\n      if (!firstValue) {\n        valueList.append(SEP);\n      } else {\n        firstValue = false;\n      }\n\n      valueList.append(value.toString());\n    }\n\n    context.write(key, new Text(valueList.toString()));\n  }\n}",
+      "blankableLines": [0, 2, 4, 6, 8, 10, 13, 14, 17, 18, 20, 22, 23, 24, 25, 28, 31],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-6",
+      "category": "MapReduce Driver",
+      "title": "Inverted Index - Driver Class",
+      "description": "Complete the MapReduce driver class for inverted index",
+      "code": "package solution;\n\nimport org.apache.hadoop.fs.Path;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\nimport org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\nimport org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;\nimport org.apache.hadoop.mapreduce.Job;\n\nimport org.apache.hadoop.conf.Configured;\nimport org.apache.hadoop.conf.Configuration;\nimport org.apache.hadoop.util.Tool;\nimport org.apache.hadoop.util.ToolRunner;\n\npublic class InvertedIndex extends Configured implements Tool {\n\n  public int run(String[] args) throws Exception {\n\n    if (args.length != 2) {\n      System.out.printf(\"Usage: InvertedIndex <input dir> <output dir>\\n\");\n      return -1;\n    }\n\n    Job job = new Job(getConf());\n    job.setJarByClass(InvertedIndex.class);\n    job.setJobName(\"Inverted Index\");\n\n    job.setInputFormatClass(KeyValueTextInputFormat.class);\n\n    FileInputFormat.setInputPaths(job, new Path(args[0]));\n    FileOutputFormat.setOutputPath(job, new Path(args[1]));\n\n    job.setMapperClass(IndexMapper.class);\n    job.setReducerClass(IndexReducer.class);\n\n    job.setOutputKeyClass(Text.class);\n    job.setOutputValueClass(Text.class);\n\n    boolean success = job.waitForCompletion(true);\n    return success ? 0 : 1;\n  }\n\n  public static void main(String[] args) throws Exception {\n    int exitCode = ToolRunner.run(new Configuration(), new InvertedIndex(), args);\n    System.exit(exitCode);\n  }\n}",
+      "blankableLines": [0, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14, 17, 19, 20, 24, 25, 26, 28, 30, 31, 33, 34, 36, 37, 39, 40, 43, 44],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-7",
+      "category": "Custom Writable",
+      "title": "StringPair Writable",
+      "description": "Complete the custom WritableComparable class",
+      "code": "package solution;\n\nimport java.io.DataInput;\nimport java.io.DataOutput;\nimport java.io.IOException;\n\nimport org.apache.hadoop.io.WritableComparable;\n\npublic class StringPairWritable implements WritableComparable<StringPairWritable> {\n\n  String left;\n  String right;\n\n  public StringPairWritable() {\n\n  }\n\n  public StringPairWritable(String left, String right) {\n    this.left = left;\n    this.right = right;\n  }\n\n  public void write(DataOutput out) throws IOException {\n    out.writeUTF(left);\n    out.writeUTF(right);\n  }\n\n  public void readFields(DataInput in) throws IOException {\n    left = in.readUTF();\n    right = in.readUTF();\n  }\n\n  public int compareTo(StringPairWritable other) {\n    int ret = left.compareTo(other.left);\n    if (ret == 0) {\n      return right.compareTo(other.right);\n    }\n    return ret;\n  }\n}",
+      "blankableLines": [0, 2, 3, 4, 6, 8, 11, 12, 18, 19, 20, 23, 24, 25, 28, 29, 30, 33, 34, 35, 36, 38],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-8",
+      "category": "MapReduce Driver",
+      "title": "Word Co-occurrence - Driver Class",
+      "description": "Complete the MapReduce driver class for word co-occurrence",
+      "code": "package solution;\n\nimport org.apache.hadoop.fs.Path;\nimport org.apache.hadoop.io.LongWritable;\nimport org.apache.hadoop.mapreduce.lib.input.FileInputFormat;\nimport org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;\nimport org.apache.hadoop.mapreduce.lib.reduce.LongSumReducer;\nimport org.apache.hadoop.mapreduce.Job;\n\nimport org.apache.hadoop.conf.Configured;\nimport org.apache.hadoop.conf.Configuration;\nimport org.apache.hadoop.util.Tool;\nimport org.apache.hadoop.util.ToolRunner;\n\npublic class WordCo extends Configured implements Tool {\n\n  @Override\n  public int run(String[] args) throws Exception {\n\n    if (args.length != 2) {\n      System.out.printf(\"Usage: WordCo <input dir> <output dir>\\n\");\n      return -1;\n    }\n\n    Job job = new Job(getConf());\n    job.setJarByClass(WordCo.class);\n    job.setJobName(\"Custom Writable Comparable Test\");\n\n    FileInputFormat.setInputPaths(job, new Path(args[0]));\n    FileOutputFormat.setOutputPath(job, new Path(args[1]));\n\n    job.setMapperClass(WordCoMapper.class);\n    job.setReducerClass(LongSumReducer.class);\n\n    job.setOutputKeyClass(StringPairWritable.class);\n    job.setOutputValueClass(LongWritable.class);\n\n    boolean success = job.waitForCompletion(true);\n    return success ? 0 : 1;\n  }\n\n  public static void main(String[] args) throws Exception {\n    int exitCode = ToolRunner.run(new Configuration(), new WordCo(), args);\n    System.exit(exitCode);\n  }\n}",
+      "blankableLines": [0, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 14, 17, 20, 21, 25, 26, 27, 29, 30, 32, 33, 35, 36, 38, 39, 42, 43],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    },
+    {
+      "id": "code-script-9",
+      "category": "MapReduce Mapper",
+      "title": "Word Co-occurrence Mapper",
+      "description": "Complete the Mapper class for word co-occurrence",
+      "code": "package solution;\n\nimport java.io.IOException;\n\nimport org.apache.hadoop.io.LongWritable;\nimport org.apache.hadoop.io.Text;\nimport org.apache.hadoop.mapreduce.Mapper;\n\npublic class WordCoMapper extends\n    Mapper<LongWritable, Text, StringPairWritable, LongWritable> {\n\n  @Override\n  public void map(LongWritable key, Text value, Context context)\n      throws IOException, InterruptedException {\n\n    String line_lc = value.toString().toLowerCase();\n    String last = null;\n\n    for (String word : line_lc.split(\"\\\\W+\")) {\n      if (word.length() > 0) {\n        if (last != null) {\n          context.write(new StringPairWritable(last, word), new LongWritable(1));\n        }\n        last = word;\n      }\n    }\n  }\n}",
+      "blankableLines": [0, 2, 4, 5, 6, 8, 9, 12, 13, 16, 17, 19, 20, 21, 22, 24],
+      "settings": {
+        "caseSensitive": true,
+        "maxBlanks": 5
+      }
+    }
+  ]
+}

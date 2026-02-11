@@ -1,0 +1,444 @@
+{
+  "questions": [
+    {
+      "id": "fill-gaps-hdfs-1",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To list the contents of your HDFS home directory, you would use the command: hadoop ___ -ls",
+      "correctAnswer": ["fs"],
+      "explanation": "The 'hadoop fs' command is used to interact with HDFS. The -ls flag lists directory contents.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-2",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To upload a local directory called 'shakespeare' to HDFS, the command is: hadoop fs ___ shakespeare ___/shakespeare",
+      "correctAnswer": ["-put", "/user/training"],
+      "explanation": "The '-put' command uploads files/directories from local filesystem to HDFS. The destination path is /user/training/shakespeare.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-3",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To view the contents of a file in HDFS, you use: hadoop fs ___ filename",
+      "correctAnswer": ["-cat"],
+      "explanation": "The '-cat' command displays the contents of a file in HDFS, similar to the Unix cat command.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-4",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To extract a compressed file and upload it to HDFS in one step: gunzip ___ access_log.gz | hadoop fs -put ___ weblog/access_log",
+      "correctAnswer": ["-c", "-"],
+      "explanation": "The 'gunzip -c' flag outputs to stdout instead of creating a file. The '-' in hadoop fs -put reads from stdin, allowing piped input.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-5",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To create a directory in HDFS, you use: hadoop fs ___ directoryname",
+      "correctAnswer": ["-mkdir"],
+      "explanation": "The '-mkdir' command creates a new directory in HDFS.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-6",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To download a file from HDFS to the local filesystem: hadoop fs ___ shakespeare/poems ~/ shakepoems.txt",
+      "correctAnswer": ["-get"],
+      "explanation": "The '-get' command downloads files from HDFS to the local filesystem.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hdfs-7",
+      "category": "HDFS",
+      "type": "fill_gaps",
+      "prompt": "To view SequenceFile contents directly, you can use: hadoop fs -cat filename | ___ but compressed SequenceFiles require ___ to read properly.",
+      "correctAnswer": ["less", "decompression"],
+      "explanation": "You can pipe HDFS file contents to 'less' for viewing, but compressed SequenceFiles need decompression before they can be read properly.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-1",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "To run a MapReduce job, the complete command syntax is: hadoop ___ wc.jar _____.WordCount shakespeare wordcounts",
+      "correctAnswer": ["jar", "stubs"],
+      "explanation": "The 'hadoop jar' command runs a MapReduce job. The format is: hadoop jar jarfile.jar package.ClassName input output",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-2",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "In the LetterMapper class, to get the first letter of a word, you would use: str._____(_____,_____)",
+      "correctAnswer": ["substring", "0", "1"],
+      "explanation": "The substring(0, 1) method extracts the first character of a string in Java.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-3",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "To get the length of a string in Java for MapReduce, you would use: str._____()",
+      "correctAnswer": ["length"],
+      "explanation": "The length() method returns the number of characters in a string.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-4",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "To create a JAR file from compiled Java classes: jar ___ wc.jar stubs/_____.class",
+      "correctAnswer": ["cvf", "*"],
+      "acceptedAnswers": [
+        ["cvf", "-cvf"],
+        ["*", "*.class"]
+      ],
+      "explanation": "The 'jar cvf' command creates a JAR file. 'c' creates, 'v' is verbose, 'f' specifies filename. The wildcard * includes all class files.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-5",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "In Hadoop Streaming, the Mapper outputs key-value pairs in the format: key ___ value ___",
+      "correctAnswer": ["<tab>", "<newline>"],
+      "acceptedAnswers": [
+        ["<tab>", "\\t", "tab"],
+        ["<newline>", "\\n", "newline"]
+      ],
+      "explanation": "Hadoop Streaming uses tab-separated key-value pairs, with each pair on a new line.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-6",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "To use tab-separated key-value input format in MapReduce, you need to set: job.setInputFormatClass(_____._____.class);",
+      "correctAnswer": ["KeyValueTextInputFormat", "class"],
+      "explanation": "KeyValueTextInputFormat.class is used for tab-separated key-value input format in MapReduce.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-7",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "To add a combiner to a MapReduce job, you use: job._____(_____._____);",
+      "correctAnswer": ["setCombinerClass", "ReducerClass", "class"],
+      "explanation": "The setCombinerClass method sets a combiner, which performs local aggregation on the mapper output before sending to reducers.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-8",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "A custom WritableComparable must implement three key methods: _____() for serialization, _____(DataInput in) for deserialization, and _____(Object o) for sorting.",
+      "correctAnswer": ["write", "readFields", "compareTo"],
+      "explanation": "WritableComparable requires write() for serialization, readFields() for deserialization, and compareTo() for sorting/comparison.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-9",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "In the word co-occurrence lab, the Mapper output key should be ___ and value should be ___, representing word pairs like \"word1,word2\" with count 1.",
+      "correctAnswer": ["Text", "IntWritable"],
+      "explanation": "Text is used for string keys (word pairs), and IntWritable is used for integer values (counts) in Hadoop MapReduce.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-10",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "In the setup() method of a Mapper, you can access configuration parameters using: context.getConfiguration()._____(\"parameterName\");",
+      "correctAnswer": ["getBoolean"],
+      "acceptedAnswers": [
+        ["getBoolean", "get", "getString", "getInt"]
+      ],
+      "explanation": "The getConfiguration() method returns the Configuration object, which provides methods like getBoolean(), get(), getString(), getInt() to access parameters.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-mapreduce-11",
+      "category": "MapReduce",
+      "type": "fill_gaps",
+      "prompt": "In secondary sort, the ___ determines which reducer gets the data, ___ controls the sort order, and ___ controls how keys are grouped for reduce calls.",
+      "correctAnswer": ["partitioner", "sort comparator", "group comparator"],
+      "acceptedAnswers": [
+        ["partitioner"],
+        ["sort comparator", "sort", "comparator"],
+        ["group comparator", "grouping comparator", "group"]
+      ],
+      "explanation": "Secondary sort uses three components: partitioner (routing), sort comparator (ordering), and group comparator (grouping keys for reduce).",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-1",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "To list currently running MapReduce jobs: mapred job ___",
+      "correctAnswer": ["-list"],
+      "explanation": "The 'mapred job -list' command displays all currently running MapReduce jobs.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-2",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "To kill a running MapReduce job: mapred job ___ jobid",
+      "correctAnswer": ["-kill"],
+      "explanation": "The 'mapred job -kill' command terminates a running MapReduce job using its job ID.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-3",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "To implement ToolRunner, your driver class should implement ___ and override the ___ method, then call ___ from main.",
+      "correctAnswer": ["Tool", "run", "ToolRunner.run"],
+      "acceptedAnswers": [
+        ["Tool"],
+        ["run"],
+        ["ToolRunner.run", "ToolRunner"]
+      ],
+      "explanation": "ToolRunner pattern requires implementing the Tool interface, overriding run(), and calling ToolRunner.run() from main method.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-4",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "To set a boolean configuration parameter programmatically, you use: Configuration._____(_____,_____)",
+      "correctAnswer": ["setBoolean", "\"parameterName\"", "value"],
+      "acceptedAnswers": [
+        ["setBoolean"],
+        ["\"parameterName\"", "parameterName"],
+        ["value", "true", "false"]
+      ],
+      "explanation": "The Configuration.setBoolean() method sets boolean configuration parameters programmatically.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-5",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "To pass configuration parameters via command line, you use the ___ flag: hadoop jar myjar.jar MyClass ___parameterName=value input output",
+      "correctAnswer": ["-D", "-D"],
+      "explanation": "The -D flag is used to pass configuration parameters via command line. Format: -DparameterName=value",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-yarn-6",
+      "category": "YARN",
+      "type": "fill_gaps",
+      "prompt": "For tables without primary keys, Sqoop requires either the ___ option with a column name or ___ to use a single mapper task.",
+      "correctAnswer": ["--split-by", "-m 1"],
+      "acceptedAnswers": [
+        ["--split-by"],
+        ["-m 1", "-m1", "--num-mappers 1"]
+      ],
+      "explanation": "Sqoop needs --split-by to specify a column for splitting data, or -m 1 to use a single mapper when no primary key exists.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-1",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To run a HiveQL script file from the command line, use: $ hive ___ myquery.hql",
+      "correctAnswer": ["-f"],
+      "explanation": "The -f flag tells Hive to execute commands from a file.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-hive-2",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To execute a HiveQL statement directly from command line: $ hive ___ 'SELECT * FROM customers'",
+      "correctAnswer": ["-e"],
+      "explanation": "The -e flag allows executing a HiveQL statement directly from the command line.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "fill-gaps-hive-3",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To enable column headers in Hive query results: set hive.cli.print._____ = true;",
+      "correctAnswer": ["header"],
+      "explanation": "Setting hive.cli.print.header to true displays column names in query results.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-4",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To load data from HDFS into a Hive table: LOAD DATA ___ '/path/to/data.txt' ___ TABLE mytable;",
+      "correctAnswer": ["INPATH", "INTO"],
+      "explanation": "LOAD DATA INPATH loads data from HDFS INTO a Hive table. The data is moved, not copied.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-5",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To load data from local filesystem into Hive: LOAD DATA ___ INPATH '/home/user/data.txt' INTO TABLE mytable;",
+      "correctAnswer": ["LOCAL"],
+      "explanation": "The LOCAL keyword specifies that data should be loaded from the local filesystem instead of HDFS.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-6",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To find customers whose names start with 'Bridget': SELECT * FROM customers WHERE fname ___ 'Bridget%';",
+      "correctAnswer": ["LIKE"],
+      "explanation": "The LIKE operator is used for pattern matching. The % wildcard matches any sequence of characters.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-7",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To extract product ID from URL using regex: REGEXP_EXTRACT(request, '/cart/additem\\\\? productid=(\\\\S+)', _____)",
+      "correctAnswer": ["1"],
+      "explanation": "REGEXP_EXTRACT returns the first captured group (index 1). Index 0 would return the entire match.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-8",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To create a table with complex data types: CREATE TABLE loyalty_program (phone ___ <STRING, STRING>, order_ids ___ <INT>);",
+      "correctAnswer": ["MAP", "ARRAY"],
+      "explanation": "Hive supports complex data types: MAP for key-value pairs and ARRAY for ordered collections.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-9",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To access map values: SELECT phone['_____'] FROM loyalty_program WHERE cust_id = 1200866;",
+      "correctAnswer": ["HOME"],
+      "acceptedAnswers": [
+        ["HOME", "WORK", "MOBILE"]
+      ],
+      "explanation": "Map values are accessed using bracket notation with the key name. 'HOME' is a common key for phone numbers.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-10",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To access the third element of an array (zero-indexed): SELECT order_ids[_____] FROM loyalty_program;",
+      "correctAnswer": ["2"],
+      "explanation": "Arrays in Hive are zero-indexed, so the third element is at index 2.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-11",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To use TRANSFORM with Python script: SELECT ___ (cookie, ip_address, steps_completed) USING 'python ipgeolocator.py' AS (zipcode, cookie, steps_completed);",
+      "correctAnswer": ["TRANSFORM"],
+      "explanation": "The TRANSFORM clause allows using external scripts (Python, Perl, etc.) to process data in Hive queries.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-12",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To register a UDF for use in queries: CREATE ___ FUNCTION CALC_SHIPPING_COST AS 'com.cloudera.hive.udf.UDFCalcShippingCost';",
+      "correctAnswer": ["TEMPORARY"],
+      "explanation": "CREATE TEMPORARY FUNCTION registers a user-defined function (UDF) for the current session only.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "fill-gaps-hive-13",
+      "category": "Hive",
+      "type": "fill_gaps",
+      "prompt": "To add a JAR file to Hive's classpath: ___ JAR geolocation_udf.jar;",
+      "correctAnswer": ["ADD"],
+      "explanation": "The ADD JAR command adds a JAR file to Hive's classpath, making its classes available for UDFs.",
+      "settings": {
+        "caseSensitive": false
+      }
+    }
+  ]
+}

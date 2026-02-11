@@ -1,0 +1,2966 @@
+{
+  "questions": [
+    {
+      "id": "mcq-single-hdfs-1",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How does a client read a file from HDFS?",
+      "options": [
+        "The client asks the NameNode for block locations, and then reads the blocks directly from the DataNodes.",
+        "The client queries all DataNodes in parallel and reads the data from whichever responds first.",
+        "The client contacts the NameNode, which fetches the data from DataNodes and streams it back to the client.",
+        "The client reads data from the NameNode, which in turn reads from DataNodes."
+      ],
+      "correctAnswer": 0,
+      "explanation": "The NameNode stores only metadata. The client first obtains block locations from the NameNode and then reads the actual data directly from the DataNodes, which avoids overloading the NameNode.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-2",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "In Hadoop 2.x, a NameNode manages how many namespaces?",
+      "options": [
+        "Two namespaces (one active and one standby)",
+        "One namespace",
+        "An arbitrary number of namespaces",
+        "No namespace (data is unstructured)"
+      ],
+      "correctAnswer": 1,
+      "explanation": "High Availability uses active and standby NameNodes for fault tolerance, but both manage the same single logical namespace.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-3",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which HDFS command copies an HDFS file named foo to the local filesystem as localFoo?",
+      "options": [
+        "hadoop fs -get foo localFoo",
+        "hadoop fs -cp foo localFoo",
+        "hadoop fs -put foo localFoo",
+        "hadoop fs -ls foo"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The -get command transfers data from HDFS to the local filesystem. The other commands either copy within HDFS, upload to HDFS, or list files.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-4",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Your cluster's HDFS block size is 64MB. You have a directory containing 100 plain text files, each of which is 100MB in size. The InputFormat for your job is TextInputFormat. Determine how many Mappers will run?",
+      "options": [
+        "64",
+        "100",
+        "200",
+        "640"
+      ],
+      "correctAnswer": 2,
+      "explanation": "TextInputFormat creates one map task per input split. With default behavior, each file is split into chunks roughly the size of the HDFS block. Each 100MB file becomes 2 splits (64MB + remaining ~36MB), so 100 files × 2 splits = 200 mappers.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-5",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "You need to move a file titled \"weblogs\" into HDFS. When you try to copy the file, you can't. You know you have ample space on your DataNodes. Which action should you take to relieve this situation and store more files in HDFS?",
+      "options": [
+        "Increase the block size on all current files in HDFS.",
+        "Increase the block size on your remaining files.",
+        "Decrease the block size on your remaining files.",
+        "Increase the amount of memory for the NameNode.",
+        "Increase the number of disks (or size) for the NameNode.",
+        "Decrease the block size on all current files in HDFS."
+      ],
+      "correctAnswer": 3,
+      "explanation": "If DataNodes have space but you still can't store more files, the bottleneck is often NameNode metadata capacity (each file/block consumes NameNode memory). Increasing NameNode memory allows it to hold more metadata.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-6",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which best defines a SequenceFile?",
+      "options": [
+        "A SequenceFile contains a binary encoding of an arbitrary number of homogeneous Writable objects",
+        "A SequenceFile contains a binary encoding of an arbitrary number of heterogeneous Writable objects",
+        "A SequenceFile contains a binary encoding of an arbitrary number of WritableComparable objects, in sorted order.",
+        "A SequenceFile contains a binary encoding of an arbitrary number key-value pairs. Each key must be the same type. Each value must be the same type."
+      ],
+      "correctAnswer": 3,
+      "explanation": "A SequenceFile is a binary file format of key-value pairs, with consistent key type and consistent value type throughout the file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-7",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which describes how a client reads a file from HDFS?",
+      "options": [
+        "The client queries the NameNode for the block location(s). The NameNode returns the block location(s) to the client. The client reads the data directory off the DataNode(s).",
+        "The client queries all DataNodes in parallel. The DataNode that contains the requested data responds directly to the client. The client reads the data directly off the DataNode.",
+        "The client contacts the NameNode for the block location(s). The NameNode then queries the DataNodes for block locations. The DataNodes respond to the NameNode, and the NameNode redirects the client to the DataNode that holds the requested data block(s). The client then reads the data directly off the DataNode.",
+        "The client contacts the NameNode for the block location(s). The NameNode contacts the DataNode that holds the requested data block. Data is transferred from the DataNode to the NameNode, and then from the NameNode to the client."
+      ],
+      "correctAnswer": 0,
+      "explanation": "The NameNode provides block locations; the client then reads data directly from the DataNodes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-8",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "What action occurs automatically on a cluster when a DataNode is marked as dead?",
+      "options": [
+        "The NameNode forces re-replication of all the blocks which were stored on the dead DataNode.",
+        "The next time a client submits job that requires blocks from the dead DataNode, the JobTracker receives no heartbeats from the DataNode. The JobTracker tells the NameNode that the DataNode is dead, which triggers block re-replication on the cluster.",
+        "The replication factor of the files which had blocks stored on the dead DataNode is temporarily reduced, until the dead DataNode is recovered and returned to the cluster.",
+        "The NameNode informs the client which wrote the blocks that are no longer available; the client then re-writes the blocks to a different DataNode."
+      ],
+      "correctAnswer": 0,
+      "explanation": "When a DataNode is declared dead, the NameNode automatically schedules re-replication of its blocks to maintain the configured replication factor.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-9",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How does the NameNode know DataNodes are available on a cluster running MapReduce v1 (MRv1)?",
+      "options": [
+        "DataNodes listed in the dfs.hosts file. The NameNode uses this as the definitive list of available DataNodes.",
+        "DataNodes heartbeat to the master on a regular basis.",
+        "The NameNode broadcasts a heartbeat on the network on a regular basis, and DataNodes respond.",
+        "The NameNode sends a broadcast across the network when it first starts, and DataNodes respond."
+      ],
+      "correctAnswer": 1,
+      "explanation": "DataNodes periodically send heartbeat messages to the NameNode to indicate that they are alive and functioning.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-10",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How does HDFS Federation help HDFS scale horizontally?",
+      "options": [
+        "HDFS Federation improves the resiliency of HDFS in the face of network issues by removing the NameNode as a single-point-of-failure.",
+        "HDFS Federation allows the Standby NameNode to automatically resume the services of an active NameNode.",
+        "HDFS Federation provides cross-data center (non-local) support for HDFS, allowing a cluster administrator to split the Block Storage outside the local cluster.",
+        "HDFS Federation reduces the load on any single NameNode by using multiple, independent NameNodes to manage individual parts of the filesystem namespace."
+      ],
+      "correctAnswer": 3,
+      "explanation": "HDFS Federation allows multiple independent NameNodes, each managing a portion of the namespace, which distributes metadata load and improves scalability.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-11",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Choose which best describes a Hadoop cluster's block size storage parameters once you set the HDFS default block size to 64MB?",
+      "options": [
+        "The block size of files in the cluster can be determined as the block is written.",
+        "The block size of files in the cluster will all be multiples of 64MB.",
+        "The block size of files in the cluster will all be at least 64MB.",
+        "The block size of files in the cluster will all be exactly 64MB."
+      ],
+      "correctAnswer": 0,
+      "explanation": "The block size is determined at file creation time. Different files can have different block sizes depending on configuration at write time.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-12",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Identify the function performed by the Secondary NameNode daemon on a cluster configured to run with a single NameNode.",
+      "options": [
+        "In this configuration, the Secondary NameNode performs a checkpoint operation on the files by the NameNode.",
+        "In this configuration, the Secondary NameNode is standby NameNode, ready to failover and provide high availability.",
+        "In this configuration, the Secondary NameNode performs real-time backups of the NameNode.",
+        "In this configuration, the Secondary NameNode serves as alternate data channel for clients to reach HDFS, should the NameNode become too busy."
+      ],
+      "correctAnswer": 0,
+      "explanation": "The Secondary NameNode periodically merges the NameNode's fsimage and edits files to create checkpoints. It does not provide failover or real-time backup.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-13",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "What is the recommended disk configuration for slave nodes in your Hadoop cluster with 6 x 2 TB hard drives?",
+      "options": [
+        "RAID 10",
+        "JBOD",
+        "RAID 5",
+        "RAID 1+0"
+      ],
+      "correctAnswer": 1,
+      "explanation": "HDFS handles replication at the software level. Using JBOD avoids RAID overhead and allows HDFS to manage data redundancy and fault tolerance.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-14",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "You configure your cluster with HDFS High Availability (HA) using Quorum-Based storage. You do not implement HDFS Federation. What is the maximum number of NameNode daemons you should run on your cluster in order to avoid a 'split-brain' scenario with your NameNodes?",
+      "options": [
+        "Unlimited. HDFS High Availability (HA) is designed to overcome limitations on the number of NameNodes you can deploy.",
+        "Two active NameNodes and one Standby NameNode",
+        "One active NameNode and one Standby NameNode",
+        "Two active NameNodes and two Standby NameNodes"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Without federation, a single namespace is supported. HA allows exactly one active and one standby NameNode to prevent split-brain situations.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-15",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Your Hadoop cluster has 25 nodes with a total of 100 TB (4 TB per node) of raw disk space allocated for HDFS storage. Assuming Hadoop's default configuration, how much data will you be able to store?",
+      "options": [
+        "Approximately 100TB",
+        "Approximately 25TB",
+        "Approximately 10TB",
+        "Approximately 33TB"
+      ],
+      "correctAnswer": 3,
+      "explanation": "With the default replication factor of 3, usable storage is roughly raw capacity divided by 3: 100 TB / 3 ≈ 33 TB.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-16",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "You set up the Hadoop cluster using NameNode Federation. One NameNode manages the /users namespace and one NameNode manages the /data namespace. What happens when a client tries to write a file to /reports/myreport.txt?",
+      "options": [
+        "The file successfully writes to /users/reports/myreport.txt.",
+        "The client throws an exception.",
+        "The file successfully writes to /reports/myreport.txt. The metadata for the file is managed by the first NameNode to which the client connects.",
+        "The file write fails silently; no file is written, no error is reported."
+      ],
+      "correctAnswer": 1,
+      "explanation": "The /reports path does not belong to any configured namespace. Since no NameNode manages that path, the client receives an exception.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-17",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "The failure of which daemon makes HDFS unavailable on a cluster running MapReduce v1 (MRv1)?",
+      "options": [
+        "NodeManager",
+        "ApplicationManager",
+        "ResourceManager",
+        "Secondary NameNode",
+        "NameNode",
+        "DataNode"
+      ],
+      "correctAnswer": 4,
+      "explanation": "The NameNode manages filesystem metadata. If it fails in a non-HA cluster, HDFS becomes unavailable.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-18",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "What is a SequenceFile in Hadoop?",
+      "options": [
+        "A SequenceFile contains a binary encoding of an arbitrary number of homogeneous writable objects.",
+        "A SequenceFile contains a binary encoding of an arbitrary number of heterogeneous writable objects.",
+        "A SequenceFile contains a binary encoding of an arbitrary number of WritableComparable objects, in sorted order.",
+        "A SequenceFile contains a binary encoding of an arbitrary number of key-value pairs. Each key must be the same type. Each value must be the same type."
+      ],
+      "correctAnswer": 3,
+      "explanation": "SequenceFiles store key-value pairs with consistent key and value types throughout the file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-19",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which method of the FileSystem object is used for reading a file in HDFS?",
+      "options": [
+        "open()",
+        "access()",
+        "select()",
+        "None of the above"
+      ],
+      "correctAnswer": 0,
+      "explanation": "open() returns an input stream for reading an HDFS file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-20",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "The switch given to 'hadoop fs' command for detailed help?",
+      "options": [
+        "-show",
+        "-help",
+        "-?",
+        "None of the above"
+      ],
+      "correctAnswer": 1,
+      "explanation": "hadoop fs -help prints detailed help for the filesystem shell commands.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-21",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "The size of block in HDFS?",
+      "options": [
+        "512 bytes",
+        "64 MB",
+        "1024 KB",
+        "None of the above"
+      ],
+      "correctAnswer": 1,
+      "explanation": "A common default block size (in many training/exam contexts) is 64MB.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-22",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "What are map files and why are they important in Hadoop?",
+      "options": [
+        "Map files are stored on the namenode and capture the metadata for all blocks on a particular rack. This is how Hadoop is 'rack aware'",
+        "Map files are the files that show how the data is distributed in the Hadoop cluster.",
+        "Map files are generated by MapReduce after the reduce step. They show the task distribution during job execution",
+        "Map files are sorted sequence files that also have an index. The index allows fast data lookup."
+      ],
+      "correctAnswer": 3,
+      "explanation": "A MapFile is a sorted SequenceFile plus an index that enables efficient lookup by key.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-23",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "What are sequence files and why are they important in Hadoop?",
+      "options": [
+        "Sequence files are binary format files that are compressed and are splittable. They are often used in high-performance MapReduce jobs",
+        "Sequence files are a type of file in the Hadoop framework that allow data to be sorted",
+        "Sequence files are intermediate files that are created by Hadoop after the map step",
+        "Both B and C are correct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "SequenceFiles are efficient binary key-value files, often splittable and compressible, good for performance and large-scale processing.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-24",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which of the following scenarios makes HDFS unavailable?",
+      "options": [
+        "JobTracker failure",
+        "TaskTracker failure",
+        "DataNode failure",
+        "NameNode failure",
+        "Secondary NameNode failure"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Without the NameNode, clients can't access filesystem metadata, so HDFS becomes unavailable (in non-HA setups).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "When is the earliest point at which the reduce method of a Reducer is called in a MapReduce job?",
+      "options": [
+        "As soon as at least one Mapper has finished processing its split.",
+        "As soon as a Mapper emits its first output record.",
+        "Only after all Mappers have finished processing all records.",
+        "It depends on the InputFormat of the job."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Reducers operate on complete key groups, which requires all mapper outputs to be available and shuffled before reduction begins.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-2",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a MapReduce job with 500 map tasks, how many map task attempts will there be?",
+      "options": [
+        "Exactly 500 (one attempt per map task, no more)",
+        "At most 500",
+        "Between 500 and 1000",
+        "At least 500",
+        "It depends on the number of reducers"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Each map task runs at least once, but failures or speculative execution can cause additional attempts, increasing the total count.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-3",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "The Hadoop framework can cope with slow or failing tasks by launching duplicate tasks on other nodes. MapReduce detects a task running slower than the average and starts another instance of the same task. The results from the first instance to finish are used. What is this feature called?",
+      "options": [
+        "Combine",
+        "Task Reattempt",
+        "Job Skipping",
+        "Speculative Execution"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Speculative execution improves performance by redundantly executing slow tasks and keeping the result of the fastest completion.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-4",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a large MapReduce job with m mappers and n reducers, how many distinct copy operations occur during the shuffle phase?",
+      "options": [
+        "m × n (each mapper's output is copied to each reducer)",
+        "n (one per reducer)",
+        "m (one per mapper)",
+        "m + n",
+        "mⁿ"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Each mapper partitions its output and sends data to every reducer, resulting in m × n data transfers during the shuffle.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-5",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Identify the utility that allows you to create and run MapReduce jobs with any executable or script as the mapper and/or reducer.",
+      "options": [
+        "Oozie",
+        "Sqoop",
+        "Flume",
+        "Hadoop Streaming",
+        "mapred (the legacy MR CLI)"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Hadoop Streaming allows developers to write mappers and reducers in any language that can read from standard input and write to standard output.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-6",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You have the following key–value pairs as output from a Map task: (the, 1), (fox, 1), (faster, 1), (than, 1), (the, 1), (dog, 1). How many unique keys will be passed to the Reducer's reduce method?",
+      "options": [
+        "Six",
+        "Five",
+        "Four",
+        "Two",
+        "One",
+        "Three"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Reducers receive one call per unique key. Although 'the' appears twice, it is processed once, resulting in five distinct keys.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-7",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can you use MapReduce to perform a relational join on two large tables sharing a key? Assume that the two tables are formatted as comma-separated files in HDFS.",
+      "options": [
+        "Yes.",
+        "Yes, but only if one of the tables fits into memory",
+        "Yes, so long as both tables fit into memory.",
+        "No, MapReduce cannot perform relational operations.",
+        "No, but it can be done with either Pig or Hive."
+      ],
+      "correctAnswer": 0,
+      "explanation": "MapReduce can perform joins using patterns like reduce-side joins (e.g., tagging records by source in the mapper and joining in the reducer). Memory fit is only required for a map-side (broadcast) join, not for MapReduce joins in general.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-8",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which process describes the lifecycle of a Mapper?",
+      "options": [
+        "The JobTracker calls the TaskTracker's configure() method, then its map() method and finally its close() method.",
+        "The TaskTracker spawns a new Mapper to process all records in a single input split.",
+        "The TaskTracker spawns a new Mapper to process each key-value pair.",
+        "The JobTracker spawns a new Mapper to process all records in a single file."
+      ],
+      "correctAnswer": 1,
+      "explanation": "A mapper task processes exactly one input split. It runs over all records in that split, calling map() repeatedly for each record within the same mapper task.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-9",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For each intermediate key, each reducer task can emit:",
+      "options": [
+        "As many final key-value pairs as desired. There are no restrictions on the types of those key-value pairs (i.e., they can be heterogeneous).",
+        "As many final key-value pairs as desired, but they must have the same type as the intermediate key-value pairs.",
+        "As many final key-value pairs as desired, as long as all the keys have the same type and all the values have the same type.",
+        "One final key-value pair per value associated with the key; no restrictions on the type.",
+        "One final key-value pair per key; no restrictions on the type."
+      ],
+      "correctAnswer": 2,
+      "explanation": "A reducer may emit zero, one, or many output records per input key, but the output key/value types must match the reducer's declared output types (homogeneous types).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-10",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You are developing a combiner that takes as input Text keys, IntWritable values, and emits Text keys, IntWritable values. Which interface should your class implement?",
+      "options": [
+        "Combiner <Text, IntWritable, Text, IntWritable>",
+        "Mapper <Text, IntWritable, Text, IntWritable>",
+        "Reducer <Text, Text, IntWritable, IntWritable>",
+        "Reducer <Text, IntWritable, Text, IntWritable>",
+        "Combiner <Text, Text, IntWritable, IntWritable>"
+      ],
+      "correctAnswer": 3,
+      "explanation": "In Hadoop, a combiner is implemented using the Reducer interface/class with the same input/output types as the mapper output.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-11",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How are keys and values presented and passed to the reducers during a standard sort and shuffle phase of MapReduce?",
+      "options": [
+        "Keys are presented to reducer in sorted order; values for a given key are not sorted.",
+        "Keys are presented to reducer in sorted order; values for a given key are sorted in ascending order.",
+        "Keys are presented to a reducer in random order; values for a given key are not sorted.",
+        "Keys are presented to a reducer in random order; values for a given key are sorted in ascending order."
+      ],
+      "correctAnswer": 0,
+      "explanation": "MapReduce guarantees that keys arrive at the reducer in sorted order. The values for a given key are grouped, but their internal order is not guaranteed unless you implement secondary sort.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-12",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Assuming default settings, which best describes the order of data provided to a reducer's reduce method:",
+      "options": [
+        "The keys given to a reducer aren't in a predictable order, but the values associated with those keys always are.",
+        "Both the keys and values passed to a reducer always appear in sorted order.",
+        "Neither keys nor values are in any predictable order.",
+        "The keys given to a reducer are in sorted order but the values associated with each key are in no predictable order"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Keys are sorted, but the value iterable for a key has no guaranteed ordering by default.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-13",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You wrote a map function that throws a runtime exception when it encounters a control character in input data. The input supplied to your mapper contains twelve such characters total, spread across five file splits. The first four file splits each have two control characters and the last split has four control characters. Identify the number of failed task attempts you can expect when you run the job with mapred.max.map.attempts set to 4:",
+      "options": [
+        "You will have forty-eight failed task attempts",
+        "You will have seventeen failed task attempts",
+        "You will have five failed task attempts",
+        "You will have twelve failed task attempts",
+        "You will have twenty failed task attempts"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Each split maps to one map task. If a split contains any bad character, that task attempt fails. With 5 splits and max 4 attempts each, each of the 5 tasks fails 4 times → 5 × 4 = 20 failed attempts.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-14",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You want to populate an associative array to perform a map-side join. You've decided to put this information in a text file, place that file into the DistributedCache and read it in your Mapper before any records are processed. Identify which method in the Mapper you should use to implement code for reading the file and populating the associative array?",
+      "options": [
+        "combine",
+        "map",
+        "init",
+        "configure"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The initialization step that runs once before processing records is where you load cached files. In many older/teaching materials this is referred to as configure() (modern API uses setup(), but that option is not listed here).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-15",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You've written a MapReduce job that will process 500 million input records and generate 500 million key-value pairs. The data is not uniformly distributed. Your MapReduce job will create a significant amount of intermediate data that it needs to transfer between mappers and reducers which is a potential bottleneck. A custom implementation of which interface is most likely to reduce the amount of intermediate data transferred across the network?",
+      "options": [
+        "Partitioner",
+        "OutputFormat",
+        "WritableComparable",
+        "Writable",
+        "InputFormat",
+        "Combiner"
+      ],
+      "correctAnswer": 5,
+      "explanation": "A combiner performs local aggregation on mapper output before shuffle, reducing the volume of intermediate data sent over the network.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-16",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You have just executed a MapReduce job. Where is intermediate data written to after being emitted from the Mapper's map method?",
+      "options": [
+        "Intermediate data is streamed across the network from Mapper to the Reduce and is never written to disk.",
+        "Into in-memory buffers on the TaskTracker node running the Mapper that spill over and are written into HDFS.",
+        "Into in-memory buffers that spill over to the local file system of the TaskTracker node running the Mapper.",
+        "Into in-memory buffers that spill over to the local file system (outside HDFS) of the TaskTracker node running the Reducer",
+        "Into in-memory buffers on the TaskTracker node running the Reducer that spill over and are written into HDFS."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Mapper outputs are buffered in memory and spilled to the mapper node's local disk (not HDFS). Reducers later fetch those local files during shuffle.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-17",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You need to run the same job many times with minor variations. Rather than hardcoding all job configuration options in your driver code, you've decided to have your Driver subclass org.apache.hadoop.conf.Configured and implement the org.apache.hadoop.util.Tool interface. Identify which invocation correctly passes mapred.job.name with a value of Example to Hadoop?",
+      "options": [
+        "hadoop -D mapred.job.name=Example MyDriver input output",
+        "hadoop MyDriver mapred.job.name=Example input output",
+        "hadoop MyDriver -D mapred.job.name=Example input output",
+        "hadoop setproperty mapred.job.name=Example MyDriver input output",
+        "hadoop setproperty ('mapred.job.name=Example') MyDriver input output"
+      ],
+      "correctAnswer": 0,
+      "explanation": "In Hadoop's generic options, you pass configuration properties as -D property=value before the class name.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-18",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You are developing a MapReduce job for sales reporting. The mapper will process input keys representing the year (IntWritable) and input values representing product identifiers (Text). Identify what determines the data types used by the Mapper for a given job.",
+      "options": [
+        "The key and value types specified in the JobConf.setMapInputKeyClass and JobConf.setMapInputValuesClass methods",
+        "The data types specified in HADOOP_MAP_DATATYPES environment variable",
+        "The mapper-specification.xml file submitted with the job determines the mapper's input key and value types.",
+        "The InputFormat used by the job determines the mapper's input key and value types."
+      ],
+      "correctAnswer": 3,
+      "explanation": "The mapper's input key and value types are produced by the RecordReader, which is part of the InputFormat. Therefore, the InputFormat determines the mapper's input data types.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-19",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which best describes how TextInputFormat processes input files and line breaks?",
+      "options": [
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReader of the split that contains the beginning of the broken line.",
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReaders of both splits containing the broken line.",
+        "The input file is split exactly at the line breaks, so each RecordReader will read a series of complete lines.",
+        "Input file splits may cross line breaks. A line that crosses file splits is ignored.",
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReader of the split that contains the end of the broken line."
+      ],
+      "correctAnswer": 0,
+      "explanation": "TextInputFormat allows splits to cross line boundaries, but ensures that a complete line is read by the RecordReader whose split contains the beginning of that line.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-20",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For each input key-value pair, mappers can emit:",
+      "options": [
+        "As many intermediate key-value pairs as designed. There are no restrictions on the types of those key-value pairs (i.e., they can be heterogeneous).",
+        "As many intermediate key-value pairs as designed, but they cannot be of the same type as the input key-value pair.",
+        "One intermediate key-value pair, of a different type.",
+        "One intermediate key-value pair, but of the same type.",
+        "As many intermediate key-value pairs as designed, as long as all the keys have the same type and all the values have the same type."
+      ],
+      "correctAnswer": 4,
+      "explanation": "A mapper may emit zero, one, or many intermediate key-value pairs, but all emitted keys must share the same type and all values must share the same type.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-21",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For a MapReduce job, on a cluster running MapReduce v1 (MRv1), what's the relationship between tasks and task attempts?",
+      "options": [
+        "There are always at least as many task attempts as there are tasks.",
+        "There are always at most as many task attempts as there are tasks.",
+        "There are always exactly as many task attempts as there are tasks.",
+        "The developer sets the number of task attempts on job submission."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Each task must run at least once, but failures or retries can cause multiple attempts for the same task.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-22",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which MapReduce daemon instantiates user code, and executes map and reduce tasks on a cluster running MapReduce v1 (MRv1)?",
+      "options": [
+        "NameNode",
+        "DataNode",
+        "JobTracker",
+        "TaskTracker",
+        "ResourceManager",
+        "ApplicationMaster",
+        "NodeManager"
+      ],
+      "correctAnswer": 3,
+      "explanation": "In MRv1, the TaskTracker runs on worker nodes and is responsible for executing map and reduce tasks.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-23",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which is faster: Map-side join or Reduce-side join? Why?",
+      "options": [
+        "Both techniques have about the same performance expectations.",
+        "Reduce-side join because join operation is done on HDFS.",
+        "Map-side join is faster because join operation is done in memory.",
+        "Reduce-side join because it is executed on the namenode which will have faster CPU and more memory."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Map-side joins avoid the expensive shuffle/sort network transfer and join locally (often in memory), so they are typically faster when applicable.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-24",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What are the common problems with map-side join in Hadoop?",
+      "options": [
+        "The most common problem with map-side joins is introducing a high level of code complexity. This complexity has several downsides: increased risk of bugs and performance degradation. Developers are cautioned to rarely use map-side joins.",
+        "The most common problem with map-side joins is lack of the available map slots since map-side joins require a lot of mappers.",
+        "The most common problems with map-side joins are out of memory exceptions on slave nodes.",
+        "The most common problem with map-side join is not clearly specifying primary index in the join. This can lead to very slow performance on large datasets."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Map-side joins often require loading one dataset (or a hash structure) into memory. If it's too large, mappers can hit out-of-memory errors.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-25",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How can you overwrite the default input format in Hadoop?",
+      "options": [
+        "In order to overwrite default input format, the Hadoop administrator has to change default settings in config file.",
+        "In order to overwrite default input format, a developer has to set new input format on job config before submitting the job to a cluster.",
+        "The default input format is controlled by each individual mapper and each line needs to be parsed individually.",
+        "None of these answers are correct."
+      ],
+      "correctAnswer": 1,
+      "explanation": "The developer chooses the InputFormat in the job configuration (driver code). It is not controlled per-mapper or only by admins.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-26",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the default input format in Hadoop?",
+      "options": [
+        "The default input format is xml. Developer can specify other input formats as appropriate if xml is not the correct input.",
+        "There is no default input format. The input format always should be specified.",
+        "The default input format is a sequence file format. The data needs to be preprocessed before using the default input format.",
+        "The default input format is TextInputFormat with byte offset as a key and entire line as a value."
+      ],
+      "correctAnswer": 3,
+      "explanation": "TextInputFormat is the common default in many examples: key = byte offset, value = line of text.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-27",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Why would a developer create a MapReduce without the reduce step in Hadoop?",
+      "options": [
+        "Developers should design MapReduce jobs without reducers only if no reduce slots are available on the cluster.",
+        "Developers should never design MapReduce jobs without reducers. An error will occur upon compile.",
+        "There is a CPU intensive step that occurs between the map and reduce steps. Disabling the reduce step speeds up data processing.",
+        "It is not possible to create a MapReduce job without at least one reduce step. A developer may decide to limit to one reducer for debugging purposes."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Removing reducers can avoid shuffle/sort and reduce overhead, making sense for tasks like filtering, parsing, and simple transformations where aggregation isn't needed.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-28",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How can you disable the reduce step in Hadoop?",
+      "options": [
+        "The Hadoop administrator has to set the number of the reducer slot to zero on all slave nodes. This will disable the reduce step.",
+        "It is impossible to disable the reduce step since it is critical part of the MapReduce abstraction.",
+        "A developer can always set the number of the reducers to zero. That will completely disable the reduce step.",
+        "While you cannot completely disable reducers you can set output to one. There needs to be at least one reduce step in MapReduce abstraction."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Setting number of reducers to 0 creates a map-only job (no reduce phase).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-29",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is reduce-side join in Hadoop?",
+      "options": [
+        "Reduce-side join is a technique to eliminate data from initial data set at reduce step",
+        "Reduce-side join is a technique for merging data from different sources based on a specific key. There are no memory restrictions",
+        "Reduce-side join is a set of API to merge data from different sources.",
+        "None of these answers are correct"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Reduce-side join groups records by key at the reducer and joins them there. It scales beyond memory but costs shuffle/sort network I/O.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-30",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is map-side join in Hadoop?",
+      "options": [
+        "Map-side join is done in the map phase and done in memory",
+        "Map-side join is a technique in which data is eliminated at the map step",
+        "Map-side join is a form of MapReduce API which joins data from different locations",
+        "None of these answers are correct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Map-side join performs the join during the map phase, typically by loading one dataset (or index) into memory or ensuring aligned partitions.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-31",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How can you use binary data in MapReduce in Hadoop?",
+      "options": [
+        "Binary data can be used directly by a MapReduce job. Often binary data is added to a sequence file.",
+        "Binary data cannot be used by Hadoop framework. Binary data should be converted to a Hadoop compatible format prior to loading.",
+        "Binary can be used in MapReduce only with very limited functionality. It cannot be used as a key for example.",
+        "Hadoop can freely use binary files with MapReduce jobs so long as the files have headers"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Binary data can be processed; SequenceFiles (or other binary formats) are commonly used to store binary key/value pairs efficiently.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-32",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Is there a map input format in Hadoop?",
+      "options": [
+        "Yes, but only in Hadoop 0.22+.",
+        "Yes, there is a special format for map files.",
+        "No, but sequence file input format can read map files.",
+        "Both 2 and 3 are correct answers."
+      ],
+      "correctAnswer": 3,
+      "explanation": "MapFileInputFormat exists, and MapFiles can also be read using SequenceFileInputFormat.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-33",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What happens if mapper output does not match reducer input in Hadoop?",
+      "options": [
+        "Hadoop API will convert the data to the type that is needed by the reducer.",
+        "Data input/output inconsistency cannot occur. A preliminary validation check is executed prior to the full execution of the job to ensure there is consistency.",
+        "The java compiler will report an error during compilation but the job will complete with exceptions.",
+        "A real-time exception will be thrown and MapReduce job will fail."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Type mismatches are detected at runtime, causing the job to fail with an exception.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-34",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can you provide multiple input paths to a MapReduce job in Hadoop?",
+      "options": [
+        "Yes, but only in Hadoop 0.22+.",
+        "No, Hadoop always operates on one input directory.",
+        "Yes, developers can add any number of input paths.",
+        "Yes, but the limit is currently capped at 10 input paths."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Hadoop allows any number of input paths to be specified for a job.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-35",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can a custom type for data MapReduce processing be implemented in Hadoop?",
+      "options": [
+        "No, Hadoop does not provide techniques for custom datatypes.",
+        "Yes, but only for mappers.",
+        "Yes, custom data types can be implemented as long as they implement Writable interface.",
+        "Yes, but only for reducers."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Custom data types must implement the Writable (and often WritableComparable) interface.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-36",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "The Hadoop API uses basic Java types such as LongWritable, Text, IntWritable. They have almost the same features as default java classes. What are these writable data types optimized for?",
+      "options": [
+        "Writable data types are specifically optimized for network transmissions",
+        "Writable data types are specifically optimized for file system storage",
+        "Writable data types are specifically optimized for MapReduce processing",
+        "Writable data types are specifically optimized for data retrieval"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Writable types are optimized for serialization and deserialization during MapReduce processing.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-37",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is Writable in Hadoop?",
+      "options": [
+        "Writable is a java interface that needs to be implemented for streaming data to remote servers.",
+        "Writable is a java interface that needs to be implemented for HDFS writes.",
+        "Writable is a java interface that needs to be implemented for MapReduce processing.",
+        "None of these answers are correct."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Writable enables efficient serialization of data types used in MapReduce.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-38",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the best performance one can expect from a Hadoop cluster?",
+      "options": [
+        "The best performance expectation one can have is measured in seconds. This is because Hadoop can only be used for batch processing",
+        "The best performance expectation one can have is measured in milliseconds. This is because Hadoop executes in parallel across so many machines",
+        "The best performance expectation one can have is measured in minutes. This is because Hadoop can only be used for batch processing",
+        "It depends on the design of the MapReduce program, how many machines in the cluster, and the amount of data being retrieved"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Performance varies widely depending on workload, cluster size, and job design.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-39",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is distributed cache in Hadoop?",
+      "options": [
+        "The distributed cache is special component on namenode that will cache frequently used data for faster client response. It is used during reduce step.",
+        "The distributed cache is special component on datanode that will cache frequently used data for faster client response. It is used during map step.",
+        "The distributed cache is a component that caches java objects.",
+        "The distributed cache is a component that allows developers to deploy jars for MapReduce processing."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Distributed cache is used to distribute files (such as JARs or lookup data) to task nodes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-40",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can you run MapReduce jobs directly on Avro data in Hadoop?",
+      "options": [
+        "Yes, Avro was specifically designed for data processing via MapReduce",
+        "Yes, but additional extensive coding is required",
+        "No, Avro was specifically designed for data storage only",
+        "Avro specifies metadata that allows easier data access. This data cannot be used as part of MapReduce execution, rather input specification only."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Avro integrates directly with MapReduce via Avro input and output formats.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-41",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is AVRO in Hadoop?",
+      "options": [
+        "Avro is a java serialization library",
+        "Avro is a java compression library",
+        "Avro is a java library that creates splittable files",
+        "None of these answers are correct"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Avro is a data serialization system used for efficient data storage and RPC.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-42",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Will settings using Java API overwrite values in configuration files in Hadoop?",
+      "options": [
+        "No. The configuration settings in the configuration file take precedence",
+        "Yes. The configuration settings using Java API take precedence",
+        "It depends when the developer reads the configuration file. If it is read first then no.",
+        "Only global configuration settings are captured in configuration files on namenode. There are only a very few job parameters that can be set using Java API."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Settings applied programmatically via the Java API override values defined in configuration files.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-43",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How many methods does Writable interface define in Hadoop?",
+      "options": [
+        "Two",
+        "Four",
+        "Three",
+        "None of the above"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Writable defines two key methods: write(DataOutput out) and readFields(DataInput in).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-44",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "RPC means ________ in Hadoop?",
+      "options": [
+        "Remote processing call",
+        "Remote process call",
+        "Remote procedure call",
+        "None of the above"
+      ],
+      "correctAnswer": 2,
+      "explanation": "RPC stands for Remote Procedure Call.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-45",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which MapReduce phase is theoretically able to utilize features of the underlying file system in order to optimize parallel execution?",
+      "options": [
+        "Split",
+        "Map",
+        "Combine"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Splitting determines how input is partitioned and scheduled, enabling data locality and parallelism by aligning splits with HDFS blocks.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-46",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the input to the Reduce function in Hadoop?",
+      "options": [
+        "One key and a list of all values associated with that key.",
+        "One key and a list of some values associated with that key.",
+        "An arbitrarily sized list of key/value pairs."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Reducer is called once per key with an iterable/list of all values for that key.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-47",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How can a distributed filesystem such as HDFS provide opportunities for optimization of a MapReduce operation?",
+      "options": [
+        "Data represented in a distributed filesystem is already sorted.",
+        "Distributed filesystems must always be resident in memory, which is much faster than disk.",
+        "Data storage and processing can be co-located on the same node, so that most input data relevant to Map or Reduce will be present on local disks or cache.",
+        "A distributed filesystem makes random access faster because of the presence of a dedicated node serving file metadata."
+      ],
+      "correctAnswer": 2,
+      "explanation": "HDFS enables data locality: scheduling map tasks close to where blocks reside reduces network transfer and improves performance.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-48",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which of the following MapReduce execution frameworks focus on execution in shared-memory environments?",
+      "options": [
+        "Hadoop",
+        "Twister",
+        "Phoenix"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Phoenix is designed for shared-memory / multicore environments, unlike Hadoop which is distributed across nodes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-49",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the implementation language of the Hadoop MapReduce framework?",
+      "options": [
+        "Java",
+        "C",
+        "FORTRAN",
+        "Python"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Hadoop MapReduce is implemented primarily in Java (with some native components elsewhere, but the framework is Java-based).",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-50",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "The Combine stage, if present, must perform the same aggregation operation as Reduce?",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Combiner must be safe as a 'mini-reducer': it should perform the same associative/commutative aggregation logic so results remain correct.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-51",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which MapReduce stage serves as a barrier, where all previous stages must be completed before it may proceed?",
+      "options": [
+        "Combine",
+        "Group (a.k.a. 'shuffle')",
+        "Reduce",
+        "Write"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Shuffle/grouping requires all mappers to finish and their outputs to be available before reducers can fully proceed.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-52",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a MapReduce job, you want each of your input files processed by a single map task. How do you configure a MapReduce job so that a single map task processes each input file regardless of how many blocks the input file occupies?",
+      "options": [
+        "Increase the parameter that controls minimum split size in the job configuration.",
+        "Write a custom MapRunner that iterates over all key-value pairs in the entire file.",
+        "Set the number of mappers equal to the number of input files you want to process.",
+        "Write a custom FileInputFormat and override the method isSplittable to always return false."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Overriding isSplittable() to return false ensures that each file is treated as a single input split, resulting in one mapper per file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-53",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which of the following best describes the workings of TextInputFormat in Hadoop?",
+      "options": [
+        "Input file splits may cross line breaks. A line that crosses file splits is ignored.",
+        "The input file is split exactly at the line breaks, so each RecordReader will read a series of complete lines.",
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReaders of both splits containing the broken line.",
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReader of the split that contains the end of the broken line.",
+        "Input file splits may cross line breaks. A line that crosses file splits is read by the RecordReader of the split that contains the beginning of the broken line."
+      ],
+      "correctAnswer": 4,
+      "explanation": "TextInputFormat allows splits to cross line boundaries but ensures that a full line is read by the RecordReader whose split contains the beginning of that line.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-54",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What happens in a MapReduce job when you set the number of reducers to one?",
+      "options": [
+        "A single reducer gathers and processes all the output from all the mappers. The output is written in as many separate files as there are mappers.",
+        "A single reducer gathers and processes all the output from all the mappers. The output is written to a single file in HDFS.",
+        "Setting the number of reducers to one creates a processing bottleneck, and since the number of reducers as specified by the programmer is used as a reference value only, the MapReduce runtime provides a default setting for the number of reducers.",
+        "Setting the number of reducers to one is invalid, and an exception is thrown"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With exactly one reducer, all mapper output is sent to that reducer, which produces a single output file in HDFS.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-55",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In the standard word count MapReduce algorithm, why might using a combiner reduce the overall job running time?",
+      "options": [
+        "Because combiners perform local aggregation of word counts, thereby allowing the mappers to process input data faster.",
+        "Because combiners perform local aggregation of word counts, thereby reducing the number of mappers that need to run.",
+        "Because combiners perform local aggregation of word counts, and then transfer that data to reducers without writing the intermediate data to disk.",
+        "Because combiners perform local aggregation of word counts, thereby reducing the number of key-value pairs that need to be shuffled across the network to the reducers."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Combiners reduce the volume of intermediate key-value pairs that must be shuffled across the network to reducers, lowering network I/O.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-yarn-1",
+      "category": "YARN",
+      "type": "mcq_single",
+      "prompt": "You want to understand more about how users browse your public website, such as which pages they visit prior to placing an order. You have a farm of 200 web servers hosting your website. How will you gather this data for your analysis?",
+      "options": [
+        "Ingest the server web logs into HDFS using Flume.",
+        "Write a MapReduce job, with the web servers for mappers, and the Hadoop cluster nodes for reduces.",
+        "Import all users' clicks from your OLTP databases into Hadoop, using Sqoop.",
+        "Channel these clickstreams into Hadoop using Hadoop Streaming.",
+        "Sample the weblogs from the web servers, copying them into Hadoop using curl."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Flume is designed for continuous ingestion of log data from many servers into HDFS reliably.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-yarn-2",
+      "category": "YARN",
+      "type": "mcq_single",
+      "prompt": "Identify the MapReduce v2 (MRv2 / YARN) daemon responsible for launching application containers and monitoring application resource usage?",
+      "options": [
+        "ResourceManager",
+        "NodeManager",
+        "ApplicationMaster",
+        "ApplicationMasterService",
+        "TaskTracker",
+        "JobTracker"
+      ],
+      "correctAnswer": 1,
+      "explanation": "The NodeManager runs on each worker node. It launches containers and monitors CPU, memory, and other resource usage for running applications.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-yarn-3",
+      "category": "YARN",
+      "type": "mcq_single",
+      "prompt": "You observe that the number of spilled records from map tasks far exceeds the number of map output records. Your child heap size is 1 GB and your io.sort.mb value is set to 100MB. How would you tune your io.sort.mb value to achieve maximum memory to disk I/O ratio?",
+      "options": [
+        "Tune io.sort.mb value until you observe that the number of spilled records equals (or is as close to equals) the number of map output records.",
+        "Decrease the io.sort.mb value below 100MB.",
+        "Increase the io.sort.mb as high as you can, as close to 1GB as possible.",
+        "For 1GB child heap size an io.sort.mb of 128MB will always maximize memory to disk I/O."
+      ],
+      "correctAnswer": 0,
+      "explanation": "The optimal value depends on workload. Increasing io.sort.mb gradually until spill count is minimized achieves the best memory-to-disk balance.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-yarn-4",
+      "category": "YARN",
+      "type": "mcq_single",
+      "prompt": "The most important consideration for slave nodes in a Hadoop cluster running production jobs that require short turnaround times is:",
+      "options": [
+        "The ratio between the amount of memory and the number of disk drives.",
+        "The ratio between the amount of memory and the total storage capacity.",
+        "The ratio between the number of processor cores and the amount of memory.",
+        "The ratio between the number of processor cores and total storage capacity.",
+        "The ratio between the number of processor cores and number of disk drives."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Short turnaround times depend heavily on sufficient memory per CPU core to avoid contention and excessive disk I/O.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-monitoring-1",
+      "category": "Cluster Management",
+      "type": "mcq_single",
+      "prompt": "You install Cloudera Manager on a cluster where each host has 1 GB of RAM. All of the services show their status as concerning. However, all jobs submitted complete without an error. Why is Cloudera Manager showing the concerning status for the services?",
+      "options": [
+        "A slave node's disk ran out of space",
+        "The slave nodes haven't sent a heartbeat in 60 minutes",
+        "The slave nodes are swapping.",
+        "DataNode service instance has crashed."
+      ],
+      "correctAnswer": 2,
+      "explanation": "With only 1 GB of RAM, system processes and Hadoop daemons often trigger memory swapping. Cloudera Manager flags this as concerning even if jobs still complete successfully.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-monitoring-2",
+      "category": "Cluster Management",
+      "type": "mcq_single",
+      "prompt": "You are running a Hadoop cluster with all monitoring facilities properly configured. Which scenario will go undetected?",
+      "options": [
+        "Map or reduce tasks that are stuck in an infinite loop.",
+        "HDFS is almost full.",
+        "The NameNode goes down.",
+        "A DataNode is disconnected from the cluster.",
+        "MapReduce jobs that are causing excessive memory swaps."
+      ],
+      "correctAnswer": 0,
+      "explanation": "A task stuck in an infinite loop may still send heartbeats and appear 'running,' so it can be harder to detect automatically compared to disk-full, daemon-down, or node-disconnect events.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hive-1",
+      "category": "Hive",
+      "type": "mcq_single",
+      "prompt": "Which one of the following statements is true about a Hive-managed table (internal table)?",
+      "options": [
+        "Records can only be added to the table via the Hive INSERT command (not via other tools).",
+        "When the table is dropped, the underlying data directory in HDFS is deleted.",
+        "Hive dynamically infers the table schema from the FROM clause of queries.",
+        "Hive uses the file format to automatically infer table schema on read."
+      ],
+      "correctAnswer": 1,
+      "explanation": "For managed tables, Hive owns both the metadata and the data, so dropping the table also removes the underlying HDFS data.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hive-2",
+      "category": "Hive",
+      "type": "mcq_single",
+      "prompt": "Given the Hive command: INSERT OVERWRITE TABLE mytable SELECT * FROM myothertable; Which of the following is true after this statement executes?",
+      "options": [
+        "The contents of myothertable are appended to mytable.",
+        "Any existing data in mytable will be overwritten.",
+        "A new table mytable is created, and data from myothertable is copied into it.",
+        "This is not a valid Hive command."
+      ],
+      "correctAnswer": 1,
+      "explanation": "INSERT OVERWRITE replaces all existing data in the target table with the new query result.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hive-3",
+      "category": "Hive",
+      "type": "mcq_single",
+      "prompt": "Which Hive command allows you to query an HCatalog table named x from Hive?",
+      "options": [
+        "SELECT * FROM x;",
+        "SELECT x.* FROM org.apache.hcatalog.hive.HCatLoader('x');",
+        "SELECT * FROM org.apache.hcatalog.hive.HCatLoader('x');",
+        "Hive cannot reference an HCatalog table directly."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Hive integrates directly with HCatalog, so HCatalog tables can be queried just like standard Hive tables.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hive-4",
+      "category": "Hive",
+      "type": "mcq_single",
+      "prompt": "You have an employee who is a Data Analyst and is very comfortable with SQL. He would like to run ad-hoc analysis on data in your HDFS cluster. Which of the following is a data warehousing software built on top of Apache Hadoop that defines a simple SQL-like query language well-suited for this kind of user?",
+      "options": [
+        "Pig",
+        "Hue",
+        "Hive",
+        "Sqoop",
+        "Oozie",
+        "Flume",
+        "Hadoop Streaming"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Hive provides HiveQL, a SQL-like language designed for analysts who are familiar with SQL and want to query data stored in HDFS.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-pig-1",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "What does Apache Pig provide in the Hadoop ecosystem?",
+      "options": [
+        "Integration of legacy C++ code with the MapReduce framework.",
+        "A simple scripting language for writing data transformation MapReduce programs.",
+        "A SQL-like database for table storage and management.",
+        "A C++ interface to MapReduce and HDFS."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Pig Latin is a high-level scripting language that simplifies writing complex data transformations which are compiled into MapReduce jobs.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-pig-2",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "To use a custom Java UDF (User-Defined Function) in a Pig script, what must you do?",
+      "options": [
+        "Define a short alias for the function name in the script.",
+        "Pass arguments to the constructor of the UDF's Java class in the Pig script.",
+        "Register the JAR file containing the UDF with the Pig runtime.",
+        "Put the UDF's JAR into the user's home directory in HDFS."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Registering the JAR makes the UDF available to the Pig runtime so it can be invoked within the script.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-pig-3",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "You have a Pig relation A with fields (gender, age, zip). You want to produce an output containing only the records for males (gender = 'M') in zip code 95102. Which Pig command would accomplish this?",
+      "options": [
+        "B = FILTER A BY (zip == '95102' AND gender == 'M');",
+        "B = FOREACH A BY (gender == 'M' AND zip == '95102');",
+        "B = JOIN A BY (gender == 'M' AND zip == '95102');",
+        "B = GROUP A BY (zip == '95102' AND gender == 'M');"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The FILTER operator selects records that meet specific conditions. The other commands serve different purposes such as transformation, joining, or grouping.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-pig-4",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "What is PIG in Hadoop?",
+      "options": [
+        "Pig is a subset for the Hadoop API for data processing",
+        "Pig is a part of the Apache Hadoop project that provides C-like scripting language interface for data processing",
+        "Pig is a part of the Apache Hadoop project. It is a 'PL-SQL' interface for data processing in Hadoop cluster",
+        "PIG is the third most popular form of meat in the US behind poultry and beef."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Pig provides Pig Latin, a high-level scripting language (often described as procedural/C-like) for data flows on Hadoop.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-pig-5",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "Which of the following statements most accurately describes the relationship between MapReduce and Pig?",
+      "options": [
+        "Pig provides additional capabilities that allow certain types of data manipulation not possible with MapReduce.",
+        "Pig provides no additional capabilities to MapReduce. Pig programs are executed as MapReduce jobs via the Pig interpreter.",
+        "Pig programs rely on MapReduce but are extensible, allowing developers to do special-purpose processing not provided by MapReduce.",
+        "Pig provides the additional capability of allowing you to control the flow of multiple MapReduce jobs."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Pig compiles Pig Latin scripts into MapReduce jobs but allows extensibility through UDFs and higher-level abstractions.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-sqoop-1",
+      "category": "Sqoop",
+      "type": "mcq_single",
+      "prompt": "Your company's relational OLTP database stores user profile records. You want to import these records into Hadoop and join them with web server log data already in HDFS. What is the best tool or method to obtain and ingest the user records into HDFS?",
+      "options": [
+        "Write a HiveQL LOAD DATA query to pull in the records.",
+        "Use Hadoop Streaming with a custom script to read from the database.",
+        "Use a Pig LOAD command to fetch the records from the database.",
+        "Use the HDFS put command to copy database tables into HDFS.",
+        "Use Sqoop to import the records from the database."
+      ],
+      "correctAnswer": 4,
+      "explanation": "Sqoop is specifically designed for efficiently transferring large volumes of data between relational databases and Hadoop.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-sqoop-2",
+      "category": "Sqoop",
+      "type": "mcq_single",
+      "prompt": "You have user profile records in your OLTP database that you want to join with weblogs you have already ingested into HDFS. How will you obtain these user records?",
+      "options": [
+        "HDFS command",
+        "Pig LOAD command",
+        "Sqoop import",
+        "Hive LOAD DATA command",
+        "Ingest with Flume agents",
+        "Ingest with Hadoop Streaming"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Sqoop is specifically designed to import structured data from relational databases into Hadoop for further processing.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-sqoop-3",
+      "category": "Sqoop",
+      "type": "mcq_single",
+      "prompt": "You have user profile records in your OLTP database that you want to join with weblogs you have already ingested into HDFS. How will you obtain these user records?",
+      "options": [
+        "HDFS commands",
+        "Pig load",
+        "Sqoop import",
+        "Hive"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Sqoop is designed to efficiently import structured data from relational databases into Hadoop for analysis and joining with HDFS data.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-flume-1",
+      "category": "Flume",
+      "type": "mcq_single",
+      "prompt": "You need to ingest continuously generated log files into HDFS for processing. Which tool is best suited for this use case?",
+      "options": [
+        "HCatalog",
+        "Flume",
+        "Sqoop",
+        "Ambari"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Flume is built for continuous, reliable ingestion of streaming log data into Hadoop storage systems.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-oozie-1",
+      "category": "Oozie",
+      "type": "mcq_single",
+      "prompt": "Workflows expressed in Oozie can contain:",
+      "options": [
+        "Iterative repetition of MapReduce jobs until a desired answer or state is reached.",
+        "Sequences of MapReduce and Pig jobs. These are limited to linear sequences of actions with exception handlers but no forks.",
+        "Sequences of MapReduce jobs only; no Pig or Hive tasks or jobs. These MapReduce sequences can be combined with forks and path joins.",
+        "Sequences of MapReduce and Pig. These sequences can be combined with other actions including forks, decision points, and path joins."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Oozie supports complex workflows including MapReduce, Pig, and other actions with forks, joins, and decision nodes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hbase-1",
+      "category": "HBase",
+      "type": "mcq_single",
+      "prompt": "You need a distributed, scalable, data store that allows you random, real-time read/write access to hundreds of terabytes of data. Which of the following would you use?",
+      "options": [
+        "Hue",
+        "Pig",
+        "Hive",
+        "Oozie",
+        "HBase",
+        "Flume",
+        "Sqoop"
+      ],
+      "correctAnswer": 4,
+      "explanation": "HBase is a distributed, column-oriented NoSQL database built on HDFS that supports random, real-time read and write access at scale.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-streaming-1",
+      "category": "Hadoop Streaming",
+      "type": "mcq_single",
+      "prompt": "Which of the following utilities allows youto create and run MapReduce jobs with any executable or script as the mapper and/or the reducer?",
+      "options": [
+        "Oozie",
+        "Sqoop",
+        "Flume",
+        "Hadoop Streaming"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Hadoop Streaming allows developers to write mappers and reducers in any language or script that can read from standard input and write to standard output.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-tacc-1",
+      "category": "Hadoop on TACC",
+      "type": "mcq_single",
+      "prompt": "Which TACC resource has support for Hadoop MapReduce?",
+      "options": [
+        "Ranger",
+        "Longhorn",
+        "Lonestar",
+        "Spur"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Among these, Longhorn is the resource known for Hadoop MapReduce support in that context.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-output-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "If you run the word count MapReduce program with m mappers and r reducers, how many output files will you get at the end of the job? And how many key-value pairs will there be in each file? Assume k is the number of unique words in the input files.",
+      "options": [
+        "There will be r files, each with exactly k/r key-value pairs.",
+        "There will be r files, each with approximately k/m key-value pairs.",
+        "There will be r files, each with approximately k/r key-value pairs.",
+        "There will be m files, each with exactly k/m key-value pairs.",
+        "There will be m files, each with approximately k/m key-value pairs."
+      ],
+      "correctAnswer": 2,
+      "explanation": "MapReduce creates one output file per reducer. Unique keys are partitioned across reducers, typically resulting in approximately k/r key-value pairs per file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-reducer-timing-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "When is the reduce method first called in a MapReduce job?",
+      "options": [
+        "Reduce methods and map methods all start at the beginning of a job.",
+        "The reduce method is called as soon as intermediate data starts to arrive.",
+        "The reduce method is called only after all intermediate data has been copied and sorted.",
+        "The reduce method starts after a configurable percentage of intermediate data arrives."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Reducers may copy mapper output early, but the reduce() method executes only after all data has been copied and sorted.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-one-mapper-per-file-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a MapReduce job, you want each input file processed by a single map task regardless of how many blocks the file occupies. How do you configure this?",
+      "options": [
+        "Increase the minimum split size in the job configuration.",
+        "Write a custom MapRunner that processes the entire file.",
+        "Set the number of mappers equal to the number of input files.",
+        "Write a custom FileInputFormat and override isSplittable to always return false."
+      ],
+      "correctAnswer": 3,
+      "explanation": "If a file is marked as non-splittable, Hadoop creates exactly one input split per file, resulting in one mapper per file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-file-visibility-1",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "You use the hadoop fs -put command to write a 300 MB file with an HDFS block size of 64 MB. After 200 MB has been written, what would another user see when accessing the file?",
+      "options": [
+        "No content until the file is completely written and closed.",
+        "Content up to the last completed block.",
+        "The file content up to the last written byte.",
+        "A concurrentFileAccessException."
+      ],
+      "correctAnswer": 0,
+      "explanation": "In HDFS, a file being written is not visible to readers until it is closed.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-reducer-communication-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Does the MapReduce programming model provide a way for reducers to communicate with each other?",
+      "options": [
+        "Yes, reducers communicate via JobConf.",
+        "Yes, reducers communicate via intermediate key-value pairs.",
+        "Yes, reducers on the same node can share memory.",
+        "No, reducers run independently and in isolation."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Reducers do not communicate with each other. Each reducer processes its assigned keys independently.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hdfs-namenode-failure-1",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which happens if the NameNode crashes in a non-HA Hadoop cluster?",
+      "options": [
+        "HDFS becomes unavailable until the NameNode is restored.",
+        "The Secondary NameNode automatically takes over.",
+        "Only new jobs fail; running jobs continue.",
+        "Clients are redirected to the Secondary NameNode."
+      ],
+      "correctAnswer": 0,
+      "explanation": "Without High Availability, the NameNode is a single point of failure and HDFS becomes unavailable if it crashes.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-combiner-benefit-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Why do combiners increase the efficiency of a MapReduce program?",
+      "options": [
+        "They allow communication between mappers.",
+        "They reduce computation by a factor of n.",
+        "They aggregate intermediate data locally and reduce network transfer.",
+        "They aggregate data across rack-local machines."
+      ],
+      "correctAnswer": 2,
+      "explanation": "Combiners perform local aggregation of mapper output, reducing the amount of data shuffled across the network.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-combiner-interface-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You are developing a combiner that takes Text keys and IntWritable values and emits the same types. Which interface should your class implement?",
+      "options": [
+        "Mapper<Text, IntWritable, Text, IntWritable>",
+        "Reducer<Text, Text, IntWritable, IntWritable>",
+        "Reducer<Text, IntWritable, Text, IntWritable>",
+        "Combiner<Text, IntWritable, Text, IntWritable>",
+        "Combiner<Text, Text, IntWritable, IntWritable>"
+      ],
+      "correctAnswer": 2,
+      "explanation": "There is no separate Combiner interface. A combiner is implemented using the Reducer interface with matching input and output types.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-oozie-workflows-2",
+      "category": "Oozie",
+      "type": "mcq_single",
+      "prompt": "Workflows expressed in Oozie can contain:",
+      "options": [
+        "Iterative repetition until a desired result is reached.",
+        "Only linear sequences of MapReduce and Pig jobs.",
+        "Only MapReduce jobs with forks and joins.",
+        "Sequences of MapReduce and Pig jobs with forks, joins, and decision nodes."
+      ],
+      "correctAnswer": 3,
+      "explanation": "Oozie supports complex workflows including forks, joins, and decision points across multiple action types.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-hadoop-job-submit-1",
+      "category": "Hadoop",
+      "type": "mcq_single",
+      "prompt": "Given a Mapper, Reducer, and Driver class packaged into a JAR, what is the correct way to submit the job?",
+      "options": [
+        "jar MyJar.jar",
+        "jar MyJar.jar MyDriverClass input output",
+        "hadoop jar MyJar.jar MyDriverClass input output",
+        "hadoop jar class MyJar.jar MyDriverClass input output"
+      ],
+      "correctAnswer": 2,
+      "explanation": "MapReduce jobs are submitted using the hadoop jar command followed by the driver class and input/output paths.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-combiner-max-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You want to find the maximum integer value per key in a large dataset. Can you safely use a combiner?",
+      "options": [
+        "No, combiners cannot be used for this.",
+        "Yes.",
+        "Yes, if the number of keys is known in advance.",
+        "Yes, only if all keys fit into memory.",
+        "Yes, only if all values fit into memory."
+      ],
+      "correctAnswer": 1,
+      "explanation": "Computing a maximum is associative and commutative, making it safe to use a combiner.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-shuffle-ops-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a MapReduce job with m mappers and r reducers, how many copy operations occur during the shuffle phase?",
+      "options": [
+        "m",
+        "r",
+        "m + r",
+        "m × r",
+        "mʳ"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Each mapper can send data to every reducer, resulting in m × r copy operations.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-zero-reducers-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the difference between setting zero reducers and one reducer in a MapReduce job?",
+      "options": [
+        "There is no difference.",
+        "Zero reducers cause a job failure.",
+        "Zero reducers produce one output file; one reducer produces multiple files.",
+        "Zero reducers produce multiple output files; one reducer produces a single output file."
+      ],
+      "correctAnswer": 3,
+      "explanation": "With zero reducers, the job is map-only and produces one output file per mapper. With one reducer, all output is written to a single file.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-single-mapreduce-mapper-semantics-1",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which best describes the input and output behavior of the map method?",
+      "options": [
+        "One input pair and exactly one output pair.",
+        "Multiple input pairs and exactly one output pair.",
+        "One input pair and a key with a list of values.",
+        "One input pair and zero, one, or many output pairs."
+      ],
+      "correctAnswer": 3,
+      "explanation": "The map method processes one input record at a time and may emit zero, one, or many output records.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-16",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You are running a job that will process a single InputSplit on a cluster with no other jobs running. Each node has an equal number of open map slots. On which node will Hadoop first attempt to run the map task?",
+      "options": [
+        "The node with the most memory",
+        "The node with the lowest system load",
+        "The node on which this InputSplit is stored",
+        "The node with the most free local disk space"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Hadoop prioritizes data locality, running map tasks where the data already resides."
+    },
+    {
+      "id": "mcq-17",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "MapReduce is well-suited for all of the following applications EXCEPT?",
+      "options": [
+        "Text mining on large collections of unstructured documents",
+        "Analysis of large amounts of web logs",
+        "Online transaction processing (OLTP) for an e-commerce website",
+        "Graph mining on a large social network"
+      ],
+      "correctAnswer": 2,
+      "explanation": "MapReduce is designed for batch processing, not low-latency transactional systems (OLTP)."
+    },
+    {
+      "id": "mcq-18",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "In a MapReduce job with 500 map tasks, how many map task attempts will there be?",
+      "options": [
+        "At least 500",
+        "Exactly 500",
+        "At most 500",
+        "Between 500 and 1000",
+        "It depends on the number of reducers"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Each task runs at least once, but retries and speculative execution may increase attempts."
+    },
+    {
+      "id": "mcq-19",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What happens in a MapReduce job when you set the number of reducers to zero?",
+      "options": [
+        "No reducer executes and mappers generate no output",
+        "No reducer executes and each mapper writes its output to a separate file in HDFS",
+        "No reducer executes and all mapper output is written to a single file",
+        "Setting reducers to zero is invalid"
+      ],
+      "correctAnswer": 1,
+      "explanation": "With zero reducers, each mapper writes its output directly to HDFS."
+    },
+    {
+      "id": "mcq-20",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For each intermediate key, each reducer task can emit:",
+      "options": [
+        "One final key-value pair per key with no restrictions",
+        "One final key-value pair per value with no restrictions",
+        "As many final key-value pairs as desired, as long as key and value types are consistent",
+        "As many final key-value pairs as desired but same as intermediate types",
+        "Any number of key-value pairs with no restrictions"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Reducers may emit zero or many records, but output types must be consistent."
+    },
+    {
+      "id": "mcq-21",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What types of algorithms are difficult to express in MapReduce?",
+      "options": [
+        "Algorithms requiring global shared state",
+        "Graph algorithms with one-step traversal",
+        "Relational operations on structured data",
+        "Text analysis on unstructured data",
+        "Applying the same function to many records"
+      ],
+      "correctAnswer": 0,
+      "explanation": "MapReduce tasks run independently and do not support shared global state."
+    },
+    {
+      "id": "mcq-22",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "You need to build a GUI application to frequently add and edit customer records. Is HDFS appropriate?",
+      "options": [
+        "Yes, HDFS supports random writes",
+        "Yes, HDFS is optimized for small reads",
+        "No, HDFS can only be accessed by MapReduce",
+        "No, HDFS is optimized for write-once streaming access"
+      ],
+      "correctAnswer": 3,
+      "explanation": "HDFS is optimized for large sequential access, not frequent small updates."
+    },
+    {
+      "id": "mcq-23",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which InputFormat should you use when each line contains a key and value separated by a tab?",
+      "options": [
+        "BDBInputFormat",
+        "KeyValueTextInputFormat",
+        "SequenceFileInputFormat",
+        "SequenceFileAsTextInputFormat"
+      ],
+      "correctAnswer": 1,
+      "explanation": "KeyValueTextInputFormat splits each line at the tab character."
+    },
+    {
+      "id": "mcq-24",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which statement best describes the data path of intermediate key-value pairs?",
+      "options": [
+        "Written to HDFS and read by reducers",
+        "Written to HDFS then copied to reducers",
+        "Written to mapper local disks and fetched by reducers",
+        "Written locally then persisted to HDFS"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Mapper output is stored on local disk and fetched by reducers during shuffle."
+    },
+    {
+      "id": "mcq-25",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "All keys used for intermediate mapper output must:",
+      "options": [
+        "Override isSplittable",
+        "Implement WritableComparable",
+        "Extend FileInputFormat",
+        "Use a custom comparator",
+        "Be compressed"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Keys must be serializable and sortable."
+    },
+    {
+      "id": "mcq-26",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Given mapper outputs (The,1), (Fox,1), (Runs,1), (Faster,1), (Than,1), (The,1), (Dog,1), how many reduce calls occur?",
+      "options": [
+        "One",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six"
+      ],
+      "correctAnswer": 5,
+      "explanation": "Reducers run once per unique key. There are six unique keys."
+    },
+    {
+      "id": "mcq-27",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which interface best reduces intermediate data transferred over the network?",
+      "options": [
+        "Writable",
+        "WritableComparable",
+        "InputFormat",
+        "OutputFormat",
+        "Combiner",
+        "Partitioner"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Combiners perform local aggregation before shuffle."
+    },
+    {
+      "id": "mcq-28",
+      "category": "Hadoop Core",
+      "type": "mcq_single",
+      "prompt": "What is a Writable?",
+      "options": [
+        "An interface for serializing and deserializing keys and values",
+        "An abstract class all keys and values must extend",
+        "An interface only keys must implement",
+        "An abstract class only keys must extend"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Writable is Hadoop’s serialization interface."
+    },
+    {
+      "id": "mcq-29",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which statement best describes the ordering of values received by a reducer?",
+      "options": [
+        "Values are sorted",
+        "Values are arbitrarily ordered and may vary between runs",
+        "Values are arbitrarily ordered but consistent",
+        "Values are sorted in contiguous blocks"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Keys are sorted, values are not guaranteed to be."
+    },
+    {
+      "id": "mcq-30",
+      "category": "HDFS + MapReduce",
+      "type": "mcq_single",
+      "prompt": "With block size 64MB and 100 files of 100MB using TextInputFormat, how many mappers will run?",
+      "options": [
+        "64",
+        "100",
+        "200",
+        "640"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Each file creates ~2 splits → 100 × 2 = 200 mappers."
+    },
+    {
+      "id": "mcq-31",
+      "category": "Hadoop Cluster",
+      "type": "mcq_single",
+      "prompt": "What is the standard configuration of slave nodes in a Hadoop MRv1 cluster?",
+      "options": [
+        "JobTracker + DataNode",
+        "TaskTracker + DataNode",
+        "Either TaskTracker or DataNode",
+        "Only DataNode",
+        "Only TaskTracker"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Worker nodes run TaskTracker and DataNode."
+    },
+    {
+      "id": "mcq-32",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which resources are likely bottlenecks when generating massive intermediate data?",
+      "options": [
+        "CPU and RAM",
+        "CPU and disk I/O",
+        "Disk I/O and network I/O",
+        "CPU and network I/O"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Spilling and shuffle stress disk and network."
+    },
+    {
+      "id": "mcq-33",
+      "category": "MapReduce v1",
+      "type": "mcq_single",
+      "prompt": "Which daemon schedules MapReduce tasks in MRv1?",
+      "options": [
+        "DataNode",
+        "NameNode",
+        "JobTracker",
+        "TaskTracker",
+        "Secondary NameNode"
+      ],
+      "correctAnswer": 2,
+      "explanation": "JobTracker schedules tasks in MRv1."
+    },
+    {
+      "id": "mcq-34",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How does the NameNode detect a DataNode failure?",
+      "options": [
+        "It does not need to know",
+        "Missing heartbeats",
+        "Periodic pings",
+        "Startup checks"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Missing heartbeats indicate failure."
+    },
+    {
+      "id": "mcq-35",
+      "category": "Sqoop",
+      "type": "mcq_single",
+      "prompt": "Which tool imports relational database data into HDFS and generates Java classes?",
+      "options": [
+        "Pig",
+        "Hue",
+        "Hive",
+        "Flume",
+        "Sqoop",
+        "Oozie",
+        "fuse-dfs"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Sqoop is designed for RDBMS imports."
+    },
+    {
+      "id": "mcq-36",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How does a client read a file from HDFS?",
+      "options": [
+        "Ask NameNode, then read directly from DataNodes",
+        "Query all DataNodes in parallel",
+        "NameNode proxies data",
+        "NameNode streams data"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Client reads blocks directly from DataNodes."
+    },
+    {
+      "id": "mcq-37",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the preferred way to pass small configuration parameters?",
+      "options": [
+        "JobConf key-value pairs",
+        "Custom input records",
+        "DistributedCache files",
+        "Static variables"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Small parameters belong in configuration."
+    },
+    {
+      "id": "mcq-38",
+      "category": "Pig",
+      "type": "mcq_single",
+      "prompt": "Which best describes the relationship between Pig and MapReduce?",
+      "options": [
+        "Pig adds capabilities impossible in MapReduce",
+        "Pig adds nothing to MapReduce",
+        "Pig runs on MapReduce and is extensible",
+        "Pig only controls workflows"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Pig compiles to MapReduce and supports UDFs."
+    },
+    {
+      "id": "mcq-39",
+      "category": "DistributedCache",
+      "type": "mcq_single",
+      "prompt": "How should a mapper load a 512MB reference file efficiently?",
+      "options": [
+        "Read in map() from DataCache",
+        "Read in map() from DistributedCache",
+        "Read in setup/configure() from DistributedCache",
+        "Serialize into JobConf"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Load once per task using DistributedCache in setup."
+    },
+    {
+      "id": "mcq-40",
+      "category": "Hadoop Storage",
+      "type": "mcq_single",
+      "prompt": "Which tool provides random, real-time read/write access at scale?",
+      "options": [
+        "Hue",
+        "Pig",
+        "Hive",
+        "Oozie",
+        "HBase",
+        "Flume",
+        "Sqoop"
+      ],
+      "correctAnswer": 4,
+      "explanation": "HBase supports real-time random access."
+    },
+    {
+      "id": "mcq-41",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "During shuffle/sort, which is true?",
+      "options": [
+        "Keys sorted, values not sorted",
+        "Keys unsorted, values sorted",
+        "Both unsorted",
+        "Keys random, values sorted"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Reducers receive sorted keys."
+    },
+    {
+      "id": "mcq-42",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How many times is reduce() called?",
+      "options": [
+        "0",
+        "1",
+        "3",
+        "5",
+        "6"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Called once per unique key."
+    },
+    {
+      "id": "mcq-43",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For each input key-value pair, mappers can emit:",
+      "options": [
+        "One output of different type",
+        "One output of same type",
+        "Many outputs of different types",
+        "Many outputs with consistent types",
+        "Unlimited heterogeneous outputs"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Mapper outputs must match declared types."
+    },
+    {
+      "id": "mcq-44",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "With 10 DataNodes of 1TB each and replication factor 3, what is usable HDFS capacity?",
+      "options": [
+        "About 3 TB",
+        "About 5 TB",
+        "About 10 TB",
+        "About 11 TB"
+      ],
+      "correctAnswer": 0,
+      "explanation": "10 TB / 3 ≈ 3.3 TB usable."
+    },
+    {
+      "id": "mcq-45",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which best describes the lifecycle of a Mapper?",
+      "options": [
+        "One mapper per record",
+        "One mapper per file",
+        "One mapper per input split",
+        "JobTracker controls mapper lifecycle"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Each mapper processes one InputSplit."
+    },
+    {
+      "id": "mcq-46",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which utility allows scripts as mapper/reducer?",
+      "options": [
+        "Oozie",
+        "Sqoop",
+        "Flume",
+        "Hadoop Streaming"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Hadoop Streaming supports scripts."
+    },
+    {
+      "id": "mcq-47",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is running duplicate tasks and using the fastest result called?",
+      "options": [
+        "Combiner",
+        "IdentityMapper",
+        "IdentityReducer",
+        "Default Partitioner",
+        "Speculative Execution"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Speculative execution mitigates slow nodes."
+    },
+    {
+      "id": "mcq-48",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What happens when reducers = 1?",
+      "options": [
+        "Multiple output files",
+        "Single output file",
+        "Runtime decides reducers",
+        "Exception thrown"
+      ],
+      "correctAnswer": 1,
+      "explanation": "One reducer produces one output file."
+    },
+    {
+      "id": "mcq-49",
+      "category": "MapReduce API",
+      "type": "mcq_single",
+      "prompt": "Calling next() on reducer value iterator:",
+      "options": [
+        "Always new object",
+        "Always pooled object",
+        "Same object reused",
+        "Reuse behavior unspecified",
+        "Depends on equality"
+      ],
+      "correctAnswer": 3,
+      "explanation": "API does not guarantee reuse behavior."
+    },
+    {
+      "id": "mcq-50",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Why does a combiner reduce job runtime?",
+      "options": [
+        "Speeds mapper execution",
+        "Reduces mapper count",
+        "Avoids disk writes",
+        "Reduces shuffle data"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Less data is sent over the network."
+    },
+    {
+      "id": "mcq-51",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the default partitioner behavior?",
+      "options": [
+        "Random assignment",
+        "Round-robin",
+        "Range-based hash",
+        "hash(key) % reducers",
+        "hash(value) % reducers"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Default partitioner uses hash(key) modulo reducers."
+    },
+    {
+      "id": "mcq-52",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "How is a large file stored in HDFS?",
+      "options": [
+        "Variable blocks replicated",
+        "Full file replicated",
+        "Master copy + block replicas",
+        "Fixed blocks with replication; blocks may co-locate",
+        "Fixed blocks with strict separation"
+      ],
+      "correctAnswer": 3,
+      "explanation": "HDFS uses fixed-size blocks with replication."
+    },
+    {
+      "id": "mcq-53",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is the difference between failed and killed task attempts?",
+      "options": [
+        "Failed throws exception; killed is terminated by framework",
+        "Failed produces no output; killed throws exception",
+        "Failed finishes incorrectly; killed is speculative copy",
+        "Failed throws RuntimeException; killed throws IOException"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Killed tasks are intentionally stopped by Hadoop."
+    },
+    {
+      "id": "mcq-54",
+      "category": "Hive",
+      "type": "mcq_single",
+      "prompt": "Which Hadoop tool provides SQL-like querying?",
+      "options": [
+        "Pig",
+        "Hue",
+        "Hive",
+        "Sqoop",
+        "Oozie",
+        "Flume",
+        "Hadoop Streaming"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Hive provides SQL on Hadoop."
+    },
+    {
+      "id": "mcq-55",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which best describes TextInputFormat behavior?",
+      "options": [
+        "Lines ignored across splits",
+        "Splits align to line breaks",
+        "Lines read twice",
+        "End-of-line split reads",
+        "Beginning-of-line split reads"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Line is read by split containing its beginning."
+    },
+    {
+      "id": "mcq-56",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Custom MapReduce counters are used for:",
+      "options": [
+        "Bookkeeping and statistics",
+        "Ensuring correctness",
+        "Synchronization"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Counters are for monitoring and debugging."
+    },
+    {
+      "id": "mcq-57",
+      "category": "NameNode",
+      "type": "mcq_single",
+      "prompt": "What does the NameNode store in RAM?",
+      "options": [
+        "File contents",
+        "Filesystem metadata",
+        "Edits log",
+        "Distributed locks"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Metadata includes filenames and block mappings."
+    },
+    {
+      "id": "mcq-58",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can MapReduce perform relational joins?",
+      "options": [
+        "Yes",
+        "Yes if one table fits in memory",
+        "Yes if both fit in memory",
+        "No",
+        "Only via Pig or Hive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Reduce-side joins are possible."
+    },
+    {
+      "id": "mcq-59",
+      "category": "Hadoop File Formats",
+      "type": "mcq_single",
+      "prompt": "What is a SequenceFile?",
+      "options": [
+        "Binary homogeneous objects",
+        "Binary heterogeneous objects",
+        "Sorted WritableComparable objects",
+        "Binary key-value pairs with fixed types"
+      ],
+      "correctAnswer": 3,
+      "explanation": "SequenceFile stores typed key-value pairs."
+    },
+    {
+      "id": "mcq-60",
+      "category": "MapReduce v1",
+      "type": "mcq_single",
+      "prompt": "Which MapReduce daemon runs on each slave node?",
+      "options": [
+        "TaskTracker",
+        "JobTracker",
+        "NameNode",
+        "Secondary NameNode"
+      ],
+      "correctAnswer": 0,
+      "explanation": "TaskTracker executes map and reduce tasks in MRv1."
+    },
+    {
+      "id": "mcq-61",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "When is the earliest point at which the reduce method of a given Reducer can be called?",
+      "options": [
+        "As soon as at least one mapper has finished processing its input split",
+        "As soon as a mapper has emitted at least one record",
+        "Not until all mappers have finished processing all records",
+        "It depends on the InputFormat used for the job"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Reducers may start copying mapper output during shuffle, but reduce() is only called after all mappers finish and shuffle/sort completes."
+    },
+    {
+      "id": "mcq-62",
+      "category": "HDFS",
+      "type": "mcq_single",
+      "prompt": "Which describes how a client reads a file from HDFS?",
+      "options": [
+        "Client queries NameNode for block locations; NameNode returns; client reads directly from DataNodes",
+        "Client queries all DataNodes in parallel; the right DataNode responds; client reads",
+        "Client contacts NameNode; NameNode queries DataNodes; NameNode redirects client; client reads",
+        "Client contacts NameNode; NameNode fetches data and sends it to the client"
+      ],
+      "correctAnswer": 0,
+      "explanation": "The NameNode provides metadata only; the client reads file blocks directly from DataNodes."
+    },
+    {
+      "id": "mcq-63",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "You are developing a combiner that takes Text keys and IntWritable values and emits the same types. Which interface should your class implement?",
+      "options": [
+        "Combiner<Text, IntWritable, Text, IntWritable>",
+        "Mapper<Text, IntWritable, Text, IntWritable>",
+        "Reducer<Text, Text, IntWritable, IntWritable>",
+        "Reducer<Text, IntWritable, Text, IntWritable>",
+        "Combiner<Text, Text, IntWritable, IntWritable>"
+      ],
+      "correctAnswer": 3,
+      "explanation": "There is no Combiner interface. A combiner is implemented using the Reducer API with matching input/output types."
+    },
+    {
+      "id": "mcq-64",
+      "category": "Hadoop Tools",
+      "type": "mcq_single",
+      "prompt": "Which utility allows MapReduce jobs to use any executable or script as mapper or reducer?",
+      "options": [
+        "Oozie",
+        "Sqoop",
+        "Flume",
+        "Hadoop Streaming",
+        "mapred"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Hadoop Streaming allows scripts and executables (Python, bash, etc.) to act as mappers/reducers."
+    },
+    {
+      "id": "mcq-65",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How are keys and values presented to reducers during shuffle and sort?",
+      "options": [
+        "Keys sorted; values for a key not sorted",
+        "Keys sorted; values sorted ascending",
+        "Keys random; values not sorted",
+        "Keys random; values sorted ascending"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Keys are sorted before reaching reducers, but value order is not guaranteed."
+    },
+    {
+      "id": "mcq-66",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Default order in the reducer reduce method:",
+      "options": [
+        "Keys unpredictable; values always sorted",
+        "Keys and values always sorted",
+        "Neither predictable",
+        "Keys sorted; values not in predictable order"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The framework sorts keys only; values arrive in an arbitrary order."
+    },
+    {
+      "id": "mcq-67",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "A runtime exception occurs on every map task. There are 5 splits and mapred.max.map.attempts=4. How many failed map attempts can occur?",
+      "options": [
+        "48",
+        "17",
+        "5",
+        "12",
+        "20"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Each split is retried up to 4 times. Worst case: 5 × 4 = 20 failed attempts."
+    },
+    {
+      "id": "mcq-68",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "A DistributedCache file must be loaded before processing records. Which Mapper method should load it?",
+      "options": [
+        "combine",
+        "map",
+        "init",
+        "configure"
+      ],
+      "correctAnswer": 3,
+      "explanation": "Reference data should be loaded once per task in configure/setup, not per record."
+    },
+    {
+      "id": "mcq-69",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Which custom implementation most reduces intermediate data transferred across the network?",
+      "options": [
+        "Partitioner",
+        "OutputFormat",
+        "WritableComparable",
+        "Writable",
+        "InputFormat",
+        "Combiner"
+      ],
+      "correctAnswer": 5,
+      "explanation": "Combiners aggregate mapper output locally, reducing shuffle traffic."
+    },
+    {
+      "id": "mcq-70",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Can you perform a relational join in MapReduce on two CSV tables sharing a key?",
+      "options": [
+        "Yes",
+        "Yes, only if one fits in memory",
+        "Yes, only if both fit in memory",
+        "No",
+        "No, only Pig or Hive"
+      ],
+      "correctAnswer": 0,
+      "explanation": "MapReduce supports reduce-side joins on large datasets."
+    },
+    {
+      "id": "mcq-71",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Where is intermediate data written after being emitted from map()?",
+      "options": [
+        "Streamed directly to reducers",
+        "Spilled to HDFS on mapper node",
+        "Spilled to mapper local filesystem",
+        "Spilled to reducer local filesystem",
+        "Written to HDFS on reducer node"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Mapper output is buffered and spilled to local disk, then fetched by reducers."
+    },
+    {
+      "id": "mcq-72",
+      "category": "Ingestion",
+      "type": "mcq_single",
+      "prompt": "How do you gather browse and click data from 200 web servers into Hadoop?",
+      "options": [
+        "Ingest logs into HDFS using Flume",
+        "Run MapReduce jobs on web servers",
+        "Sqoop import from OLTP",
+        "Hadoop Streaming",
+        "curl copy samples"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Flume is built for reliable log collection from many servers."
+    },
+    {
+      "id": "mcq-73",
+      "category": "Hadoop CLI",
+      "type": "mcq_single",
+      "prompt": "Which ToolRunner-style command correctly sets mapred.job.name?",
+      "options": [
+        "hadoop mapred.job.name=Example MyDriver input output",
+        "hadoop MyDriver mapred.job.name=Example input output",
+        "hadoop MyDriver -D mapred.job.name=Example input output",
+        "hadoop setproperty mapred.job.name=Example MyDriver input output",
+        "hadoop setproperty (mapred.job.name=Example) MyDriver input output"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Generic Hadoop properties are passed using -D property=value."
+    },
+    {
+      "id": "mcq-74",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What determines the mapper input key/value data types for a job?",
+      "options": [
+        "JobConf.setMapInputKeyClass",
+        "HADOOP_MAP_DATATYPES env var",
+        "mapper-specification.xml",
+        "InputFormat"
+      ],
+      "correctAnswer": 3,
+      "explanation": "The InputFormat and RecordReader define mapper input key/value types."
+    },
+    {
+      "id": "mcq-75",
+      "category": "YARN",
+      "type": "mcq_single",
+      "prompt": "Which MRv2/YARN daemon launches containers and monitors resource usage?",
+      "options": [
+        "ResourceManager",
+        "NodeManager",
+        "ApplicationMaster",
+        "ApplicationMasterService",
+        "TaskTracker",
+        "JobTracker"
+      ],
+      "correctAnswer": 1,
+      "explanation": "NodeManager runs on each node and manages containers."
+    },
+    {
+      "id": "mcq-76",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "How does TextInputFormat handle line breaks across splits?",
+      "options": [
+        "Split with line start reads it",
+        "Both splits read it",
+        "Splits align to line breaks",
+        "Broken line ignored",
+        "Split with line end reads it"
+      ],
+      "correctAnswer": 0,
+      "explanation": "A line is read by the split that contains its beginning."
+    },
+    {
+      "id": "mcq-77",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "For each input key-value pair, mappers can emit:",
+      "options": [
+        "Many; heterogeneous types",
+        "Many; different from input types",
+        "One; different type",
+        "One; same type",
+        "Many; consistent output types"
+      ],
+      "correctAnswer": 4,
+      "explanation": "Mappers may emit 0..N records but output types must be consistent."
+    },
+    {
+      "id": "mcq-78",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "Map output: (the,1)(fox,1)(faster,1)(than,1)(the,1)(dog,1). How many reduce() calls occur?",
+      "options": [
+        "Six",
+        "Five",
+        "Four",
+        "Two",
+        "One",
+        "Three"
+      ],
+      "correctAnswer": 1,
+      "explanation": "Reducer runs once per unique key: the, fox, faster, than, dog."
+    },
+    {
+      "id": "mcq-79",
+      "category": "Ingestion",
+      "type": "mcq_single",
+      "prompt": "You need to import user profiles from an OLTP database into HDFS. Which tool do you use?",
+      "options": [
+        "HDFS command",
+        "Pig LOAD",
+        "Sqoop import",
+        "Hive LOAD DATA",
+        "Flume",
+        "Hadoop Streaming"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Sqoop is designed for RDBMS to HDFS imports."
+    },
+    {
+      "id": "mcq-80",
+      "category": "MapReduce",
+      "type": "mcq_single",
+      "prompt": "What is a disadvantage of using multiple reducers with the default HashPartitioner?",
+      "options": [
+        "No compression",
+        "No combiner",
+        "Output not globally sorted",
+        "No disadvantages"
+      ],
+      "correctAnswer": 2,
+      "explanation": "Each reducer outputs a sorted partition; the full output is not globally sorted."
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "questions": [
+    {
+      "id": "mcq-single-1",
+      "category": "JavaScript Basics",
+      "type": "mcq_single",
+      "prompt": "What is the correct way to declare a variable in JavaScript?",
+      "options": [
+        "variable myVar = 10;",
+        "let myVar = 10;",
+        "v myVar = 10;",
+        "dim myVar = 10;"
+      ],
+      "correctAnswer": 1,
+      "explanation": "In modern JavaScript, 'let' is the recommended way to declare variables. 'var' is also valid but has different scoping rules, and 'const' is used for constants.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-1",
+      "category": "JavaScript Basics",
+      "type": "mcq_multi",
+      "prompt": "Which of the following are valid JavaScript data types? (Select all that apply)",
+      "options": [
+        "String",
+        "Integer",
+        "Boolean",
+        "Number",
+        "Character"
+      ],
+      "correctAnswer": [0, 2, 3],
+      "explanation": "JavaScript has String, Boolean, and Number as primitive data types. There is no separate 'Integer' or 'Character' type - numbers include both integers and floats, and characters are just strings of length 1.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "fill-gaps-1",
+      "category": "JavaScript Basics",
+      "type": "fill_gaps",
+      "prompt": "To create a function in JavaScript, you use the ___ keyword, followed by the function name and ___.",
+      "correctAnswer": ["function", "parentheses"],
+      "acceptedAnswers": [
+        ["function"],
+        ["parentheses", "parenthesis", "()"]
+      ],
+      "explanation": "Functions in JavaScript are declared using the 'function' keyword, followed by the function name and parentheses containing any parameters.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "complete-code-1",
+      "category": "JavaScript Basics",
+      "type": "complete_code",
+      "prompt": "function greet(name) {\n  return ___ + name + ___;\n}",
+      "correctAnswer": ["\"Hello, \"", "\"!\""],
+      "acceptedAnswers": [
+        ["\"Hello, \"", "'Hello, '", "`Hello, `"],
+        ["\"!\"", "'!'", "`!`"]
+      ],
+      "explanation": "This function concatenates strings to create a greeting. JavaScript allows single quotes, double quotes, or backticks for strings.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "mcq-single-2",
+      "category": "React Fundamentals",
+      "type": "mcq_single",
+      "prompt": "What hook is used to manage state in a functional React component?",
+      "options": [
+        "useEffect",
+        "useState",
+        "useContext",
+        "useReducer"
+      ],
+      "correctAnswer": 1,
+      "explanation": "useState is the primary hook for managing state in functional components. While useReducer can also manage state, useState is the most common and straightforward option.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-2",
+      "category": "React Fundamentals",
+      "type": "mcq_multi",
+      "prompt": "Which of the following are valid React hooks? (Select all that apply)",
+      "options": [
+        "useState",
+        "useComponent",
+        "useEffect",
+        "useProps",
+        "useCallback"
+      ],
+      "correctAnswer": [0, 2, 4],
+      "explanation": "useState, useEffect, and useCallback are all built-in React hooks. There is no 'useComponent' or 'useProps' hook - props are passed as function parameters.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "fill-gaps-2",
+      "category": "React Fundamentals",
+      "type": "fill_gaps",
+      "prompt": "The useEffect hook in React runs ___ effects. If you want to run an effect only once on mount, you pass an empty ___ as the second argument.",
+      "correctAnswer": ["side", "array"],
+      "acceptedAnswers": [
+        ["side", "side-effect"],
+        ["array", "dependency array", "[]"]
+      ],
+      "explanation": "useEffect is used for side effects like data fetching or subscriptions. The dependency array controls when the effect runs - an empty array means it runs only once after the initial render.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "complete-code-2",
+      "category": "React Fundamentals",
+      "type": "complete_code",
+      "prompt": "const [count, setCount] = ___(0);\n\nconst increment = () => {\n  ___(count + 1);\n};",
+      "correctAnswer": ["useState", "setCount"],
+      "explanation": "useState returns an array with the current state value and a setter function. The setter function is used to update the state.",
+      "settings": {
+        "caseSensitive": true
+      }
+    },
+    {
+      "id": "mcq-single-3",
+      "category": "TypeScript",
+      "type": "mcq_single",
+      "prompt": "What is the correct way to define an interface in TypeScript?",
+      "options": [
+        "interface User { name: string; }",
+        "Interface User { name: string; }",
+        "def User { name: string; }",
+        "type User = { name: string; }"
+      ],
+      "correctAnswer": 0,
+      "explanation": "Interfaces are defined using the 'interface' keyword (lowercase). While 'type' can also be used to define object shapes, 'interface' is the traditional way for object types.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "fill-gaps-3",
+      "category": "TypeScript",
+      "type": "fill_gaps",
+      "prompt": "TypeScript is a ___ of JavaScript that adds static ___.",
+      "correctAnswer": ["superset", "typing"],
+      "acceptedAnswers": [
+        ["superset"],
+        ["typing", "types", "type checking"]
+      ],
+      "explanation": "TypeScript extends JavaScript by adding optional static typing, which helps catch errors during development rather than at runtime.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "mcq-single-4",
+      "category": "HTML & CSS",
+      "type": "mcq_single",
+      "prompt": "Which CSS property is used to change the text color of an element?",
+      "options": [
+        "text-color",
+        "font-color",
+        "color",
+        "text-style"
+      ],
+      "correctAnswer": 2,
+      "explanation": "The 'color' property is used to set the text color in CSS.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "mcq-multi-3",
+      "category": "HTML & CSS",
+      "type": "mcq_multi",
+      "prompt": "Which of the following are valid CSS display properties? (Select all that apply)",
+      "options": [
+        "block",
+        "inline",
+        "flex",
+        "floating",
+        "grid"
+      ],
+      "correctAnswer": [0, 1, 2, 4],
+      "explanation": "block, inline, flex, and grid are all valid display properties. 'floating' is not a display value - 'float' is a separate CSS property.",
+      "settings": {
+        "shuffleOptions": false
+      }
+    },
+    {
+      "id": "fill-gaps-4",
+      "category": "HTML & CSS",
+      "type": "fill_gaps",
+      "prompt": "The CSS ___ model describes how elements are sized and spaced. It consists of content, padding, border, and ___.",
+      "correctAnswer": ["box", "margin"],
+      "explanation": "The CSS box model is fundamental to layout. Every element is treated as a box with content, padding, border, and margin.",
+      "settings": {
+        "caseSensitive": false
+      }
+    },
+    {
+      "id": "complete-code-3",
+      "category": "HTML & CSS",
+      "type": "complete_code",
+      "prompt": "<div class=\"___\">\n  <h1>Hello World</h1>\n</div>\n\n.container {\n  display: ___;\n  justify-content: center;\n}",
+      "correctAnswer": ["container", "flex"],
+      "explanation": "This creates a flexbox container that centers its content horizontally using justify-content.",
+      "settings": {
+        "caseSensitive": true
+      }
+    }
+  ]
+}
