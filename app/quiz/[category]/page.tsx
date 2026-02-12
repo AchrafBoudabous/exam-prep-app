@@ -80,59 +80,70 @@ export default function QuizPage() {
   };
 
   const handleNext = () => {
-    const question = questions[currentIndex];
+  const question = questions[currentIndex];
+  
+  // ALWAYS save the current answer first (both practice and exam mode)
+  if (currentAnswer !== null && currentAnswer !== undefined) {
+    const validation = validateAnswer(question, currentAnswer);
     
-    if (currentAnswer !== null && currentAnswer !== undefined) {
-      const validation = validateAnswer(question, currentAnswer);
-      
-      const newAnswers = new Map(answers);
-      newAnswers.set(question.id, currentAnswer);
-      setAnswers(newAnswers);
+    const newAnswers = new Map(answers);
+    newAnswers.set(question.id, currentAnswer);
+    setAnswers(newAnswers);
 
-      const newResults = new Map(results);
-      newResults.set(question.id, validation);
-      setResults(newResults);
+    const newResults = new Map(results);
+    newResults.set(question.id, validation);
+    setResults(newResults);
 
-      setAnsweredQuestions(prev => new Set(prev).add(currentIndex));
-      if (validation.isCorrect) {
-        setCorrectQuestions(prev => new Set(prev).add(currentIndex));
-        if (!results.has(question.id)) {
-          setScore(score + 1);
+    // Update tracking sets
+    setAnsweredQuestions(prev => new Set(prev).add(currentIndex));
+    if (validation.isCorrect) {
+      setCorrectQuestions(prev => new Set(prev).add(currentIndex));
+      if (!results.has(question.id)) {
+        setScore(score + 1);
+      }
+    }
+
+    // Show feedback in practice mode
+    if (mode === 'practice') {
+      setCurrentValidation(validation);
+      setShowFeedback(true);
+      return; // Don't move to next question yet
+    }
+  }
+
+  // Move to next question or finish
+  if (currentIndex < questions.length - 1) {
+    setCurrentIndex(currentIndex + 1);
+    setCurrentAnswer(null);
+    setCurrentValidation(null);
+    setShowFeedback(false);
+  } else {
+    // Quiz finished - recalculate ALL results including the last answer we just saved
+    if (mode === 'exam') {
+      let finalScore = 0;
+      const finalResults = new Map<string, ValidationResult>();
+
+      // Create updated answers map with the current answer
+      const allAnswers = new Map(answers);
+      if (currentAnswer !== null && currentAnswer !== undefined) {
+        allAnswers.set(question.id, currentAnswer);
+      }
+
+      questions.forEach((q) => {
+        const answer = allAnswers.get(q.id);
+        const validation = validateAnswer(q, answer);
+        finalResults.set(q.id, validation);
+        if (validation.isCorrect) {
+          finalScore++;
         }
-      }
+      });
 
-      if (mode === 'practice') {
-        setCurrentValidation(validation);
-        setShowFeedback(true);
-        return;
-      }
+      setResults(finalResults);
+      setScore(finalScore);
     }
-
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-      setCurrentAnswer(null);
-      setCurrentValidation(null);
-      setShowFeedback(false);
-    } else {
-      if (mode === 'exam') {
-        let finalScore = 0;
-        const finalResults = new Map<string, ValidationResult>();
-
-        questions.forEach((q) => {
-          const answer = answers.get(q.id);
-          const validation = validateAnswer(q, answer);
-          finalResults.set(q.id, validation);
-          if (validation.isCorrect) {
-            finalScore++;
-          }
-        });
-
-        setResults(finalResults);
-        setScore(finalScore);
-      }
-      setShowResults(true);
-    }
-  };
+    setShowResults(true);
+  }
+};
 
   const handleContinue = () => {
     if (currentIndex < questions.length - 1) {
