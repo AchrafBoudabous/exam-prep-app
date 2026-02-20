@@ -40,11 +40,12 @@ export interface CodeScript {
   title: string;
   description: string;
   code: string;
-  blankableLines: number[]; 
+  blankableLines: number[];
   settings: {
     caseSensitive: boolean;
     maxBlanks: number;
   };
+  randomize?: boolean;
 }
 
 export interface ValidationResult {

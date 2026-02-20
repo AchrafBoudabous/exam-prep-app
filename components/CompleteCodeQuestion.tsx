@@ -1,5 +1,3 @@
-// components/CompleteCodeQuestion.tsx
-
 'use client';
 
 import { CompleteCodeQuestion } from '@/lib/types';
@@ -35,13 +33,21 @@ export default function CompleteCodeQuestionComponent({
     const scriptData = (question as any)._scriptData;
     
     if (scriptData) {
-      // This is a code script that needs randomization
+      // This is a code script that needs blanking
       const lines = question.prompt.split('\n');
       const maxBlanks = Math.min(scriptData.maxBlanks, scriptData.blankableLines.length);
       
-      // Randomly select lines to blank out
-      const shuffled = [...scriptData.blankableLines].sort(() => Math.random() - 0.5);
-      const selectedLines = shuffled.slice(0, maxBlanks).sort((a, b) => a - b);
+      let selectedLines: number[];
+      
+      // Check if randomization is disabled
+      if (scriptData.randomize === false) {
+        // Use ALL blankableLines in order (exam mode - fixed blanks)
+        selectedLines = [...scriptData.blankableLines].sort((a, b) => a - b);
+      } else {
+        // Randomly select lines to blank out (practice mode - random blanks)
+        const shuffled = [...scriptData.blankableLines].sort(() => Math.random() - 0.5);
+        selectedLines = shuffled.slice(0, maxBlanks).sort((a, b) => a - b);
+      }
       
       // Extract the correct answers for selected lines
       const correctAnswers: string[] = [];

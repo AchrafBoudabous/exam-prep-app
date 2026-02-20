@@ -77,7 +77,8 @@ export function codeScriptToQuestion(script: CodeScript): CompleteCodeQuestion {
     },
     _scriptData: {
       blankableLines: validBlankableLines,
-      maxBlanks: script.settings.maxBlanks
+      maxBlanks: script.settings.maxBlanks,
+      randomize: script.randomize ?? true  // Add this line - default to true if not specified
     }
   } as CompleteCodeQuestion;
 }
